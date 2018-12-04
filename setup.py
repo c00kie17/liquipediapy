@@ -19,6 +19,8 @@ setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        
+        'beautifulsoup4>=4.6.3',
+        'requests>=2.20.1',
+        'urllib3>=1.23'
     ],
 )
