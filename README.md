@@ -50,6 +50,7 @@ from liquidpy import liquidpy
 
 liquipy_object = liquidpy('appname')
 ```
+***
 <a name="liquidpy_parse"></a>  
 #### parse(page,page_format)
 parses a given page
@@ -68,7 +69,7 @@ parses a given page
 ```python
 soup,url = liquipy_object.parse('arteezy')
 ```
-
+***
 <a name="liquidpy_search"></a>  
 #### search(serach_value)
 searchs liquipedia.net for a given term
@@ -87,4 +88,4 @@ searchs liquipedia.net for a given term
 ```python
 search_result = liquipy_object.search('mar')
 ```
-
+***
