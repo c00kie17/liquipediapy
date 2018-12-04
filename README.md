@@ -9,6 +9,7 @@
 - [Contributing](#cb)
 - [Author](#author)
 - [License](#ls)
+- [Issue](#issue)
 
 <a name="install"></a>
 ## Install 
