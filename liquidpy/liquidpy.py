@@ -9,8 +9,8 @@ class liquidpy():
 		self.__headers = {'User-Agent': appname,'Accept-Encoding': 'gzip'}
 		self.__base_url = 'https://liquipedia.net/dota2/api.php?'
 
-	def parse(self,page,page_format='json'):
-		url = self.__base_url+'action=parse&format='+page_format+'&page='+page
+	def parse(self,page):
+		url = self.__base_url+'action=parse&format=json&page='+page
 		response = requests.get(url, headers=self.__headers)
 		if response.status_code == 200:
 			try:
@@ -30,8 +30,8 @@ class liquidpy():
 			raise ex.RequestsException(response.json(),response.status_code)	
 
 
-	def search(self,serach_value,page_format='json'):
-		url = self.__base_url+'action=opensearch&format='+page_format+'&search='+serach_value
+	def search(self,serach_value):
+		url = self.__base_url+'action=opensearch&format=json&search='+serach_value
 		response = requests.get(url, headers=self.__headers)
 		if response.status_code == 200:
 			return  response.json()
