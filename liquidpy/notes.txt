@@ -1,0 +1,12 @@
+players that cant be handled:
+* fury 
+* Protoss
+* Turbo
+* XuAn
+
+
+*create and integrate liquipy api with liquipy commands 
+*create csgo api 
+
+
+ 
