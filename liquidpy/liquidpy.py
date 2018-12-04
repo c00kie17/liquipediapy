@@ -30,8 +30,8 @@ class liquidpy():
 			raise ex.RequestsException(response.json(),response.status_code)	
 
 
-	def search(self,serach_value):
-		url = self.__base_url+'action=opensearch&format=json&search='+serach_value
+	def search(self,serachValue):
+		url = self.__base_url+'action=opensearch&format=json&search='+serachValue
 		response = requests.get(url, headers=self.__headers)
 		if response.status_code == 200:
 			return  response.json()

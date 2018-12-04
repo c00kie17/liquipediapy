@@ -200,12 +200,12 @@ class dota():
 		return patches		
 		
 			
-	def get_tournaments(self,tournament_type=None):
+	def get_tournaments(self,tournamentType=None):
 		tournaments = []
-		if tournament_type is None:
+		if tournamentType is None:
 			page_val = 'Portal:Tournaments'
 		else:
-			page_val = tournament_type.capitalize()+'_Tournaments'				
+			page_val = tournamentType.capitalize()+'_Tournaments'				
 		soup,__ = self.liquipedia.parse(page_val)
 		div_rows = soup.find_all('div',class_='divRow')
 		for row in div_rows:
