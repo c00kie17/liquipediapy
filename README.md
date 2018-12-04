@@ -20,8 +20,8 @@ Please refer to [liquipedia's terms of use](https://liquipedia.net/api-terms-of-
 ## Examples
 The `examples` directory contains an example files on how to interact with the each object.
 
-##Docs
-- [liquidpy](#liquidpy)
+## Docs
+- [liquidpy](#liquidpy_obj)
   - [parse](#liquidpy_parse)
   - [search](#liquidpy_search)
 - [dota](#dota)
@@ -36,7 +36,7 @@ The `examples` directory contains an example files on how to interact with the e
   - [get_tournaments](#dota_get_tournaments)
   - [get_pro_circuit_details](#dota_get_pro_circuit_details)
   
-<a name="liquidpy"></a>  
+<a name="liquidpy_obj"></a>  
 #### liquidpy(appname)
 create a liquidpy object
 
