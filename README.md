@@ -141,7 +141,7 @@ dota_obj = dota("appname")
 
 <a name="dota_get_players"></a>  
 #### get_players()
-returns all dota players on this [page](https://liquipedia.net/dota2/Portal:Players)
+returns all dota players from [Portal:Players](https://liquipedia.net/dota2/Portal:Players)
 
 ##### response
 ````python
@@ -201,7 +201,7 @@ team_details = dota_obj.get_team_info('Team Liquid',True)
 
 <a name="get_transfers"></a>  
 #### get_transfers()
-gets all entries from this [page](https://liquipedia.net/dota2/Portal:Transfers)
+gets all transfers from [Portal:Transfers](https://liquipedia.net/dota2/Portal:Transfers)
 
 
 
@@ -217,7 +217,7 @@ transfers = dota_obj.get_transfers()
 
 <a name="dota_get_upcoming_and_ongoing_games"></a>  
 #### get_upcoming_and_ongoing_games()
-gets all entries from this [page](https://liquipedia.net/dota2/Liquipedia:Upcoming_and_ongoing_matches)
+gets all matches from [Liquipedia:Upcoming_and_ongoing_matches](https://liquipedia.net/dota2/Liquipedia:Upcoming_and_ongoing_matches)
 
 
 
@@ -233,7 +233,7 @@ games = dota_obj.get_upcoming_and_ongoing_games()
 
 <a name="dota_get_heros"></a>  
 #### get_heros()
-gets all entries from this [page](https://liquipedia.net/dota2/Portal:Heroes)
+gets all heros from [Portal:Heroes](https://liquipedia.net/dota2/Portal:Heroes)
 
 
 
@@ -249,7 +249,7 @@ heros = dota_obj.get_heros()
 
 <a name="dota_get_items"></a>  
 #### get_items()
-gets all entries from this [page](https://liquipedia.net/dota2/Portal:Items)
+gets all items from [Portal:Items](https://liquipedia.net/dota2/Portal:Items)
 
 
 
@@ -265,7 +265,7 @@ items = dota_obj.get_items()
 
 <a name="dota_get_patches"></a>  
 #### get_patches()
-gets all entries from this [page](https://liquipedia.net/dota2/Portal:Patches)
+gets all patches from [Portal:Patches](https://liquipedia.net/dota2/Portal:Patches)
 
 
 
@@ -282,7 +282,7 @@ patches = dota_obj.get_patches()
 
 <a name="dota_get_tournaments"></a>  
 #### get_tournaments()
-gets all entries from this [page](https://liquipedia.net/dota2/Portal:Tournaments)
+gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Portal:Tournaments)
 
 
 
