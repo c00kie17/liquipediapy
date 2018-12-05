@@ -18,7 +18,7 @@ Please refer to [liquipedia's terms of use](https://liquipedia.net/api-terms-of-
 
 <a name="examples"></a>
 ## Examples
-The `examples` directory contains an example files on how to interact with the each object.
+The [examples](https://github.com/c00kie17/liquidpy/tree/master/examples) directory contains an example files on how to interact with the each object.
 
 <a name="api"></a>
 ## API
