@@ -1,10 +1,10 @@
-from liquidpy import liquidpy
+from liquipediapy import liquipediapy
 
 
-liquidpy_object = liquidpy('appname')
+liquipediapy_object = liquipediapy('appname')
 
-soup,url = liquidpy_object.parse('arteezy')
+soup,url = liquipediapy_object.parse('arteezy')
 
-match_details = liquidpy_object.dota2webapi('4225454337')
+match_details = liquipediapy_object.dota2webapi('4225454337')
 
-search_result = liquidpy_object.search('mar')
+search_result = liquipediapy_object.search('mar')

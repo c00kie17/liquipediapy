@@ -1,4 +1,4 @@
-# liquidpy
+# liquipediapy
 > api for liquipedia.net 
 
 ## Contents
@@ -12,20 +12,20 @@
 <a name="install"></a>
 ## Install 
 
-```pip install liquidpy```
+```pip install liquipediapy```
 
 Please refer to [liquipedia's terms of use](https://liquipedia.net/api-terms-of-use) for rate-limiting information. 
 
 <a name="examples"></a>
 ## Examples
-The [examples](https://github.com/c00kie17/liquidpy/tree/master/examples) directory contains an example files on how to interact with the each class.
+The [examples](https://github.com/c00kie17/liquipediapy/tree/master/examples) directory contains an example files on how to interact with the each class.
 
 <a name="api"></a>
 ## API
-- [liquidpy](#liquidpy_obj)
-  - [parse](#liquidpy_parse)
-  - [dota2webapi](#liquidpy_dota2webapi)
-  - [search](#liquidpy_search)
+- [liquipediapy](#liquipediapy_obj)
+  - [parse](#liquipediapy_parse)
+  - [dota2webapi](#liquipediapy_dota2webapi)
+  - [search](#liquipediapy_search)
 - [dota](#dota)
   - [get_players](#dota_get_players)
   - [get_player_info](#dota_get_player_info)
@@ -38,9 +38,9 @@ The [examples](https://github.com/c00kie17/liquidpy/tree/master/examples) direct
   - [get_tournaments](#dota_get_tournaments)
   - [get_pro_circuit_details](#dota_get_pro_circuit_details)
   
-<a name="liquidpy_obj"></a>  
-#### liquidpy(appname)
-create a liquidpy object
+<a name="liquipediapy_obj"></a>  
+#### liquipediapy(appname)
+create a liquipediapy object
 
 ##### parameters
 | Param | Type | Description |
@@ -49,12 +49,12 @@ create a liquidpy object
 
 ##### example
 ```python
-from liquidpy import liquidpy
+from liquipediapy import liquipediapy
 
-liquipy_object = liquidpy('appname')
+liquipy_object = liquipediapy('appname')
 ```
 ***
-<a name="liquidpy_parse"></a>  
+<a name="liquipediapy_parse"></a>  
 #### parse(page)
 parses a given page
 [example](https://liquipedia.net/dota2/api.php?action=parse&page=arteezy)
@@ -72,11 +72,11 @@ parses a given page
 
 ##### example
 ```python
-soup,url = liquidpy_object.parse('arteezy')
+soup,url = liquipediapy_object.parse('arteezy')
 ```
 ***
 
-<a name="liquidpy_dota2webapi"></a>  
+<a name="liquipediapy_dota2webapi"></a>  
 #### dota2webapi(matchId)
 returns match details for a given match 
 [example](https://liquipedia.net/dota2/api.php?action=dota2webapi&matchid=4225454337&data=picks_bans%7Cplayers%7Ckills_deaths|duration|radiant_win|teams|start_time&format=json)
@@ -95,12 +95,12 @@ returns match details for a given match
 
 ##### example
 ```python
-match_details = liquidpy_object.dota2webapi('4225454337')
+match_details = liquipediapy_object.dota2webapi('4225454337')
 ```
 ***
 
 
-<a name="liquidpy_search"></a>  
+<a name="liquipediapy_search"></a>  
 #### search(serach_value)
 searchs liquipedia.net for a given term
 [example](https://liquipedia.net/dota2/api.php?action=opensearch&format=json&search=mid)
@@ -118,7 +118,7 @@ searchs liquipedia.net for a given term
 
 ##### example
 ```python
-search_result = liquidpy_object.search('mar')
+search_result = liquipediapy_object.search('mar')
 ```
 ***
 <a name="dota"></a>  
@@ -132,7 +132,7 @@ create a dota object
 
 ##### example
 ```python
-from liquidpy import dota
+from liquipediapy import dota
 
 dota_obj = dota("appname")
 ```
@@ -288,7 +288,7 @@ gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Port
 
 ##### response
 ````python
-[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquidpy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania', 'event_location': 'Bucharest', 'links': [{'pglesports': 'http://dota2.pglesports.com/'},...,{'twitter': 'https://twitter.com/pglesports'}]},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'event_location': 'Online', 'winner': ' CG', 'runner_up': ' WG.U'}]
+[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania', 'event_location': 'Bucharest', 'links': [{'pglesports': 'http://dota2.pglesports.com/'},...,{'twitter': 'https://twitter.com/pglesports'}]},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'event_location': 'Online', 'winner': ' CG', 'runner_up': ' WG.U'}]
 ````
 ##### example
 ```python
@@ -316,7 +316,7 @@ pro_circuit_details = dota_obj.get_pro_circuit_details()
 <a name="cb"></a> 
 ## Contributing
 
-Contributions are welcome. Please submit all pull requests the against master branch. Please check the [Contributing Guidelines](https://github.com/c00kie17/liquidpy/blob/master/CONTRIBUTING.md) for more details. If you want to contribute but have no idea what to work towards please check the [TODO](https://github.com/c00kie17/liquidpy/blob/master/TODO.md) file or [Issues](https://github.com/c00kie17/liquidpy/issues) there should always be something there you can work towards. Thanks! 
+Contributions are welcome. Please submit all pull requests the against master branch. Please check the [Contributing Guidelines](https://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.md) for more details. If you want to contribute but have no idea what to work towards please check the [TODO](https://github.com/c00kie17/liquipediapy/blob/master/TODO.md) file or [Issues](https://github.com/c00kie17/liquipediapy/issues) there should always be something there you can work towards. Thanks! 
 
 ***
 <a name="author"></a> 

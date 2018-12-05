@@ -1,9 +1,9 @@
-# liquidpy TODO
+# liquipediapy TODO
 
 > A list of things you can contribute towards 
 
 
-## Liquidpy
+## liquipediapy
 
 
 ***

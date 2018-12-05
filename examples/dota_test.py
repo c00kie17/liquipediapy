@@ -1,10 +1,12 @@
-from liquidpy import dota
+from liquipediapy import dota
 
 dota_obj = dota("appname")
 
 players = dota_obj.get_players()
 
+
 player_details = dota_obj.get_player_info('Miracle-',True)
+
 
 team_details = dota_obj.get_team_info('Team Liquid',True)
 
@@ -21,3 +23,4 @@ patches = dota_obj.get_patches()
 tournaments = dota_obj.get_tournaments()
 
 pro_circuit_details = dota_obj.get_pro_circuit_details()
+

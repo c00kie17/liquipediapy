@@ -1,15 +1,16 @@
 from setuptools import setup, find_packages
 
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='liquidpy',
+    name='liquipediapy',
     version = '1.0.0',
     description= 'api for liquipedia.net',
     author = 'c00kie17',
     author_email = 'anshul1708@gmail.com',
-    url = 'https://github.com/c00kie17/liquidpy',
+    url = 'https://github.com/c00kie17/liquipediapy',
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
