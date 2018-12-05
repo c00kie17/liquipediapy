@@ -271,7 +271,7 @@ gets all entries from this [page](https://liquipedia.net/dota2/Portal:Patches)
 
 ##### response
 ````python
-[{'Version': '7.20c', 'Release Date': '2018-11-24', 'Highlights': ['Balance Changes']}, {'Version': '7.20b', 'Release Date': '2018-11-20', 'Highlights': ['Balance Changes']},...,{'Version': '0.60', 'Highlights': ['Ported the following heroes:', ' Chen', ' Crystal Maiden', ' Death Prophet', ' Doom', ' Drow Ranger', ' Faceless Void', ' Lich', ' Lina', ' Lion', ' Magnus', " Nature's Prophet", ' Nyx Assassin', ' Pugna', ' Queen of Pain', ' Razor', ' Riki', ' Shadow Shaman', ' Silencer', ' Slardar', ' Sven', ' Vengeful Spirit', ' Venomancer', ' Viper', ' Visage', ' Wraith King']}]
+[{'Version': '7.20c', 'Release Date': '2018-11-24', 'Highlights': ['Balance Changes']},...,{'Version': '0.60', 'Highlights': ['Ported the following heroes:', ' Chen', ' Crystal Maiden', ' Death Prophet', ' Doom', ' Drow Ranger', ' Faceless Void', ' Lich', ' Lina', ' Lion', ' Magnus', " Nature's Prophet", ' Nyx Assassin', ' Pugna', ' Queen of Pain', ' Razor', ' Riki', ' Shadow Shaman', ' Silencer', ' Slardar', ' Sven', ' Vengeful Spirit', ' Venomancer', ' Viper', ' Visage', ' Wraith King']}]
 ````
 ##### example
 ```python
