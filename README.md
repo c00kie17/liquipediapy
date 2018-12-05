@@ -8,6 +8,7 @@
 - [Contributing](#cb)
 - [Author](#author)
 - [License](#ls)
+- [Notes](#notes)
 
 <a name="install"></a>
 ## Install 
@@ -329,6 +330,8 @@ Contributions are welcome. Please submit all pull requests the against master br
 This project conforms to the [CC-BY-SA 3.0 license](https://creativecommons.org/licenses/by-sa/3.0/us/) as that is the License that all the text data on Liquipedia adhears to, for more information you can check out the [Liquipedia Copyrights Page](https://liquipedia.net/commons/Liquipedia:Copyrights). 
 
 A lot of images you can download with this API have been provided to Liquipedia under separate licensing terms that may be incompatible with [CC-BY-SA 3.0 license](https://creativecommons.org/licenses/by-sa/3.0/us/).
- 
 
-
+***
+<a name="notes"></a> 
+## Notes
+Liquipedia has a [API Terms of Use page](https://liquipedia.net/api-terms-of-use). The rate limits mentioned there have to be strictly followed, or bans will be issued by Liquipedias server administration.
