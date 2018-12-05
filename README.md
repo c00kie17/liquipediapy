@@ -4,12 +4,10 @@
 ## Contents
 - [Installation](#install)
 - [Examples](#examples)
-- [Docs](#docs)
-- [Running](#run)
+- [API](#api)
 - [Contributing](#cb)
 - [Author](#author)
 - [License](#ls)
-- [Issue](#issue)
 
 <a name="install"></a>
 ## Install 
@@ -18,10 +16,12 @@
 
 Please refer to [liquipedia's terms of use](https://liquipedia.net/api-terms-of-use) for rate-limiting information. 
 
+<a name="examples"></a>
 ## Examples
 The `examples` directory contains an example files on how to interact with the each object.
 
-## Docs
+<a name="api"></a>
+## API
 - [liquidpy](#liquidpy_obj)
   - [parse](#liquidpy_parse)
   - [dota2webapi](#liquidpy_dota2webapi)
@@ -288,7 +288,7 @@ gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Port
 
 ##### response
 ````python
-[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania', 'event_location': 'Bucharest', 'links': [{'pglesports': 'http://dota2.pglesports.com/'},...,{'twitter': 'https://twitter.com/pglesports'}]},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'event_location': 'Online', 'winner': ' CG', 'runner_up': ' WG.U'}]
+[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquidpy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania', 'event_location': 'Bucharest', 'links': [{'pglesports': 'http://dota2.pglesports.com/'},...,{'twitter': 'https://twitter.com/pglesports'}]},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'event_location': 'Online', 'winner': ' CG', 'runner_up': ' WG.U'}]
 ````
 ##### example
 ```python
@@ -313,4 +313,21 @@ returns pro circuit [rankings](https://liquipedia.net/dota2/Dota_Pro_Circuit/201
 pro_circuit_details = dota_obj.get_pro_circuit_details()
 ```
 ***
+<a name="cb"></a> 
+## Contributing
+
+Contributions are welcome. Please submit all pull requests the against master branch. Please check the [Contributing Guidelines](https://github.com/c00kie17/liquidpy/blob/master/CONTRIBUTING.md) for more details. If you want to contribute but have no idea what to work towards please check the [TODO](https://github.com/c00kie17/liquidpy/blob/master/TODO.md) file or [Issues](https://github.com/c00kie17/liquidpy/issues) there should always be something there you can work towards. Thanks! 
+
+
+<a name="author"></a> 
+## Author
+[c00kie17](https://github.com/c00kie17)
+
+<a name="ls"></a> 
+## License
+This project conforms to the [CC-BY-SA 3.0 license](https://creativecommons.org/licenses/by-sa/3.0/us/) as that is the License that all the text data on Liquipedia adhears to, for more information you can check out the [Liquipedia Copyrights Page](https://liquipedia.net/commons/Liquipedia:Copyrights). 
+
+A lot of images you can download with this API have been provided to Liquipedia under separate licensing terms that may be incompatible with [CC-BY-SA 3.0 license](https://creativecommons.org/licenses/by-sa/3.0/us/).
+ 
+
 
