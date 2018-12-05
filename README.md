@@ -24,6 +24,7 @@ The `examples` directory contains an example files on how to interact with the e
 ## Docs
 - [liquidpy](#liquidpy_obj)
   - [parse](#liquidpy_parse)
+  - [dota2webapi](#liquidpy_dota2webapi)
   - [search](#liquidpy_search)
 - [dota](#dota)
   - [get_players](#dota_get_players)
@@ -71,9 +72,34 @@ parses a given page
 
 ##### example
 ```python
-soup,url = liquipy_object.parse('arteezy')
+soup,url = liquidpy_object.parse('arteezy')
 ```
 ***
+
+<a name="liquidpy_dota2webapi"></a>  
+#### dota2webapi(matchId)
+returns match details for a given match 
+[example](https://liquipedia.net/dota2/api.php?action=dota2webapi&matchid=4225454337&data=picks_bans%7Cplayers%7Ckills_deaths|duration|radiant_win|teams|start_time&format=json)
+
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| matchId | <code>string</code> | ID of the match you want details for  |
+
+
+##### response
+| Return | Type | Description |
+| --- | --- | --- |
+| match_details | <code>json</code> | match_details if valid matchID otherwise an error in json  |
+
+
+##### example
+```python
+match_details = liquidpy_object.dota2webapi('4225454337')
+```
+***
+
+
 <a name="liquidpy_search"></a>  
 #### search(serach_value)
 searchs liquipedia.net for a given term
@@ -92,7 +118,7 @@ searchs liquipedia.net for a given term
 
 ##### example
 ```python
-search_result = liquipy_object.search('mar')
+search_result = liquidpy_object.search('mar')
 ```
 ***
 <a name="dota"></a>  
@@ -123,7 +149,7 @@ returns all dota players on this [page](https://liquipedia.net/dota2/Portal:Play
 ````
 ##### example
 ```python
-dota_obj.get_players()
+players = dota_obj.get_players()
 ```
 ***
 
@@ -145,6 +171,146 @@ gets information for a specified player
 ````
 ##### example
 ```python
-dota_obj.get_player_info('Miracle-',True)
+player_details = dota_obj.get_player_info('Miracle-',True)
 ```
 ***
+
+
+<a name="dota_get_team_info"></a>  
+#### get_team_info(teamName,results)
+gets information for a specified team
+
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| teamName | <code>string</code> | name of the team |
+| results | <code>bool</code> | if you want to parse the results page for the team, defauls to ```False``` |
+
+
+##### response
+````python
+{'info': {'image': 'https://liquipedia.net/commons/images/thumb/b/b6/Team_Liquid_2017_Vertical_Type.png/600px-Team_Liquid_2017_Vertical_Type.png', 'location': ['Netherlands', 'Europe'], 'region': 'Europe', 'director': 'NazgulSteve Arhancet', 'manager': 'Mohamed Morad', 'team captain': 'KuroKy', 'sponsor': ['Monster',..., 'Ballistix'], 'earnings': 17312752, 'ranking': {'rank': '2', 'points': 9459}, 'created': '2012-12-06'}, 'links': {'teamliquidpro': 'https://www.teamliquidpro.com/',..., 'datdota': 'https://www.datdota.com/teams/2163'}, 'cups': ['RaidCall Dota 2 League Season 2', ... ,'China Dota2 Supermajor'], 'team_roster': [{'ID': 'MATUMBAMAN', 'Name': 'Lasse Urpalainen', 'Position': '1/2', 'Join Date': '2015-10-09'}, ...,{'ID': 'KuroKy', 'Name': 'Kuro Salehi Takhasomi', 'Position': '5', 'Join Date': '2015-10-09'}], 'results': [{'Date': '2018-11-30', 'Placement': '22', 'LP Tier': 'Qualifier', 'Tournament': 'The Chongqing Major Europe Qualifier', 'Results': '2:1', 'opponent': 'Alliance', 'Prize': '$0'},...,{'Date': '2013-02-10', 'Placement': '11', 'LP Tier': 'Minor', 'Tournament': 'BeyondTheSummit Weekend Cup', 'Results': '2:1', 'opponent': 'Fnatic', 'Prize': '$500'}]}
+
+````
+##### example
+```python
+team_details = dota_obj.get_team_info('Team Liquid',True)
+```
+***
+
+
+<a name="get_transfers"></a>  
+#### get_transfers()
+gets all entries from this [page](https://liquipedia.net/dota2/Portal:Transfers)
+
+
+
+##### response
+````python
+[{'Date': '2018-12-03', 'Player': ['Moogy', 'Inflame'], 'Previous': 'Newbee', 'Current': 'Newbee'},...{'Date': '2018-09-10', 'Player': ['Fenrir'], 'Previous': 'Vici Gaming', 'Current': 'Team Aster'}]
+````
+##### example
+```python
+transfers = dota_obj.get_transfers()
+```
+***
+
+<a name="dota_get_upcoming_and_ongoing_games"></a>  
+#### get_upcoming_and_ongoing_games()
+gets all entries from this [page](https://liquipedia.net/dota2/Liquipedia:Upcoming_and_ongoing_matches)
+
+
+
+##### response
+````python
+[{'team1': 'WP Gaming', 'format': 'Bo3', 'team2': 'Playmakers Esports', 'start_time': 'December 5, 2018 - 2:00 UTC', 'tournament': 'The Bucharest Minor SA Qual', 'twitch_channel': None},...,{'team1': 'Doge (Singaporean team)', 'format': 'Bo1', 'team2': 'Casuals', 'start_time': 'December 15, 2018 - 9:00 UTC', 'tournament': 'SEL Season 2', 'twitch_channel': 'sgpesports'}]
+````
+##### example
+```python
+games = dota_obj.get_upcoming_and_ongoing_games()
+```
+***
+
+<a name="dota_get_heros"></a>  
+#### get_heros()
+gets all entries from this [page](https://liquipedia.net/dota2/Portal:Heroes)
+
+
+
+##### response
+````python
+[{'image': 'https://liquipedia.net/commons/images/thumb/f/fa/Abaddon_Large.png/125px-Abaddon_Large.png', 'name': 'Abaddon'},...,{'image': 'https://liquipedia.net/commons/images/thumb/9/91/Zeus_Large.png/125px-Zeus_Large.png', 'name': 'Zeus'}]
+````
+##### example
+```python
+heros = dota_obj.get_heros()
+```
+***
+
+<a name="dota_get_items"></a>  
+#### get_items()
+gets all entries from this [page](https://liquipedia.net/dota2/Portal:Items)
+
+
+
+##### response
+````python
+[{'image': 'https://liquipedia.net/commons/images/thumb/c/cd/Animal_Courier.png/60px-Animal_Courier.png', 'name': 'Animal Courier', 'price': '50'},...,{'image': 'https://liquipedia.net/commons/images/thumb/e/  e8/Ring_of_Aquila.png/60px-Ring_of_Aquila.png', 'name': 'Ring of Aquila', 'price': '985'}]
+````
+##### example
+```python
+items = dota_obj.get_items()
+```
+***
+
+<a name="dota_get_patches"></a>  
+#### get_patches()
+gets all entries from this [page](https://liquipedia.net/dota2/Portal:Patches)
+
+
+
+##### response
+````python
+[{'Version': '7.20c', 'Release Date': '2018-11-24', 'Highlights': ['Balance Changes']}, {'Version': '7.20b', 'Release Date': '2018-11-20', 'Highlights': ['Balance Changes']},...,{'Version': '0.60', 'Highlights': ['Ported the following heroes:', ' Chen', ' Crystal Maiden', ' Death Prophet', ' Doom', ' Drow Ranger', ' Faceless Void', ' Lich', ' Lina', ' Lion', ' Magnus', " Nature's Prophet", ' Nyx Assassin', ' Pugna', ' Queen of Pain', ' Razor', ' Riki', ' Shadow Shaman', ' Silencer', ' Slardar', ' Sven', ' Vengeful Spirit', ' Venomancer', ' Viper', ' Visage', ' Wraith King']}]
+````
+##### example
+```python
+patches = dota_obj.get_patches()
+```
+***
+
+
+<a name="dota_get_tournaments"></a>  
+#### get_tournaments()
+gets all entries from this [page](https://liquipedia.net/dota2/Portal:Tournaments)
+
+
+
+##### response
+````python
+[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania', 'event_location': 'Bucharest', 'links': [{'pglesports': 'http://dota2.pglesports.com/'},...,{'twitter': 'https://twitter.com/pglesports'}]},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'event_location': 'Online', 'winner': ' CG', 'runner_up': ' WG.U'}]
+````
+##### example
+```python
+tournaments = dota_obj.get_tournaments()
+```
+***
+
+
+
+<a name="dota_get_pro_circuit_details"></a>  
+#### get_pro_circuit_details()
+returns pro circuit [rankings](https://liquipedia.net/dota2/Dota_Pro_Circuit/2018-19/Rankings) and [schedule](https://liquipedia.net/dota2/Dota_Pro_Circuit/2018-19/Schedule)
+
+
+
+##### response
+````python
+{'rankings': [{'#': '1.', 'ID': ' Virtus.pro', 'Points': ' 4950', 'DreamLeague Season 10': 0, 'The Kuala Lumpur Major': ' 4950', 'The Bucharest Minor': 0, 'The Chongqing Major': 0, 'TBD': 0, 'DreamLeague Season 11': 0, 'AMD SAPPHIRE Dota PIT Minor': 0},...{'#': '23.', 'ID': ' ROOONS', 'Points': ' 8.192 5', 'DreamLeague Season 10': ' 20', 'The Kuala Lumpur Major': 0, 'The Bucharest Minor': 0, 'The Chongqing Major': 0, 'TBD': 0, 'DreamLeague Season 11': 0, 'AMD SAPPHIRE Dota PIT Minor': 0}], 'schedule': [{'Date': 'Sep 16-21, 2018', 'Title': ' The Kuala Lumpur Major Qualifier', 'DPC Points': '0'},...,{'Date': 'June 20-30, 2019', 'Title': 'Major Main Event', 'DPC Points': '15000'}]}
+````
+##### example
+```python
+pro_circuit_details = dota_obj.get_pro_circuit_details()
+```
+***
+
