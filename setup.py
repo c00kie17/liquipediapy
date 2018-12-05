@@ -6,7 +6,7 @@ with open("README.md", "r",encoding='utf-8') as fh:
 
 setup(
     name='liquipediapy',
-    version = '1.0.0',
+    version = '1.1.0',
     description= 'api for liquipedia.net',
     author = 'c00kie17',
     author_email = 'anshul1708@gmail.com',
@@ -22,6 +22,8 @@ setup(
     install_requires=[
         'beautifulsoup4>=4.6.3',
         'requests>=2.20.1',
-        'urllib3>=1.23'
+        'urllib3>=1.23',
+        'lxml>=4.2.4'
+
     ],
 )
