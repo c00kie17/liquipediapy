@@ -18,7 +18,7 @@ Please refer to [liquipedia's terms of use](https://liquipedia.net/api-terms-of-
 
 <a name="examples"></a>
 ## Examples
-The [examples](https://github.com/c00kie17/liquidpy/tree/master/examples) directory contains an example files on how to interact with the each object.
+The [examples](https://github.com/c00kie17/liquidpy/tree/master/examples) directory contains an example files on how to interact with the each class.
 
 <a name="api"></a>
 ## API
@@ -55,7 +55,7 @@ liquipy_object = liquidpy('appname')
 ```
 ***
 <a name="liquidpy_parse"></a>  
-#### parse(page,page_format)
+#### parse(page)
 parses a given page
 [example](https://liquipedia.net/dota2/api.php?action=parse&page=arteezy)
 ##### parameters
