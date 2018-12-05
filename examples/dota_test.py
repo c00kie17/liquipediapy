@@ -4,9 +4,7 @@ dota_obj = dota("appname")
 
 players = dota_obj.get_players()
 
-
 player_details = dota_obj.get_player_info('Miracle-',True)
-
 
 team_details = dota_obj.get_team_info('Team Liquid',True)
 

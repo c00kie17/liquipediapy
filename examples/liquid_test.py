@@ -1,6 +1,5 @@
 from liquipediapy import liquipediapy
 
-
 liquipediapy_object = liquipediapy('appname')
 
 soup,url = liquipediapy_object.parse('arteezy')
