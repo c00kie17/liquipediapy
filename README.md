@@ -318,11 +318,12 @@ pro_circuit_details = dota_obj.get_pro_circuit_details()
 
 Contributions are welcome. Please submit all pull requests the against master branch. Please check the [Contributing Guidelines](https://github.com/c00kie17/liquidpy/blob/master/CONTRIBUTING.md) for more details. If you want to contribute but have no idea what to work towards please check the [TODO](https://github.com/c00kie17/liquidpy/blob/master/TODO.md) file or [Issues](https://github.com/c00kie17/liquidpy/issues) there should always be something there you can work towards. Thanks! 
 
-
+***
 <a name="author"></a> 
 ## Author
 [c00kie17](https://github.com/c00kie17)
 
+***
 <a name="ls"></a> 
 ## License
 This project conforms to the [CC-BY-SA 3.0 license](https://creativecommons.org/licenses/by-sa/3.0/us/) as that is the License that all the text data on Liquipedia adhears to, for more information you can check out the [Liquipedia Copyrights Page](https://liquipedia.net/commons/Liquipedia:Copyrights). 
