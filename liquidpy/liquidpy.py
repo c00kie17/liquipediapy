@@ -27,7 +27,21 @@ class liquidpy():
 				soup,__ = self.parse(redirect_value)
 				return soup,redirect_value
 		else:
+			raise ex.RequestsException(response.json(),response.status_code)
+
+
+	def dota2webapi(self,matchId):
+		url = self.__base_url+'action=dota2webapi&data=picks_bans|players|kills_deaths|duration|radiant_win|teams|start_time&format=json&matchid='+matchId
+		response = requests.get(url, headers=self.__headers)
+		if response.status_code == 200:
+			res = response.json()
+			if res['dota2webapi']['isresult'] >= 1:
+				return res['dota2webapi']['result']
+			else:
+				return res['dota2webapi']['result']['error']
+		else:
 			raise ex.RequestsException(response.json(),response.status_code)	
+
 
 
 	def search(self,serachValue):
