@@ -1,12 +1,10 @@
 from liquidpy import liquidpy
 
 
-liquipy_object = liquidpy('appname')
+liquidpy_object = liquidpy('appname')
 
-soup,url = liquipy_object.parse('arteezy')
-print(soup)
-print(url)
+soup,url = liquidpy_object.parse('arteezy')
 
-print(liquipy_object.dota2webapi('4225454337'))
+match_details = liquidpy_object.dota2webapi('4225454337')
 
-print(liquipy_object.search('mar'))
+search_result = liquidpy_object.search('mar')
