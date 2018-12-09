@@ -283,10 +283,13 @@ patches = dota_obj.get_patches()
 
 
 <a name="dota_get_tournaments"></a>  
-#### get_tournaments()
+#### get_tournaments(type)
 gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Portal:Tournaments)
 
-
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>string</code> | type of tournaments , defaults to ```None``` , accepted values are ```Premier``` ,```Major```, ```Minor``` , ```Monthly```, ```Weekly```|
 
 ##### response
 ````python
