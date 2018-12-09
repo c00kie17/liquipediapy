@@ -80,6 +80,7 @@ soup,url = liquipediapy_object.parse('arteezy')
 <a name="liquipediapy_dota2webapi"></a>  
 #### dota2webapi(matchId)
 returns match details for a given dota2 match, only works if ```game``` value in contructor is set to ```dota2```
+
 [example](https://liquipedia.net/dota2/api.php?action=dota2webapi&matchid=4225454337&data=picks_bans%7Cplayers%7Ckills_deaths|duration|radiant_win|teams|start_time&format=json)
 
 ##### parameters
