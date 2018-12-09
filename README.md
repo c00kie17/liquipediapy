@@ -39,13 +39,14 @@ The [examples](https://github.com/c00kie17/liquipediapy/tree/master/examples) di
   - [get_pro_circuit_details](#dota_get_pro_circuit_details)
   
 <a name="liquipediapy_obj"></a>  
-#### liquipediapy(appname)
+#### liquipediapy(appname,game)
 create a liquipediapy object
 
 ##### parameters
 | Param | Type | Description |
 | --- | --- | --- |
 | appname | <code>string</code> | The name for your app, you can refer to the [liquipedia's terms of use](https://liquipedia.net/api-terms-of-use) for more information |
+| game | <code>string</code> | name of the game you want to create the object for |
 
 ##### example
 ```python
@@ -78,7 +79,7 @@ soup,url = liquipediapy_object.parse('arteezy')
 
 <a name="liquipediapy_dota2webapi"></a>  
 #### dota2webapi(matchId)
-returns match details for a given match 
+returns match details for a given dota2 match, only works if ```game``` value in [contructor](<a name="liquipediapy_obj"></a> ) is set to ```dota2```
 [example](https://liquipedia.net/dota2/api.php?action=dota2webapi&matchid=4225454337&data=picks_bans%7Cplayers%7Ckills_deaths|duration|radiant_win|teams|start_time&format=json)
 
 ##### parameters

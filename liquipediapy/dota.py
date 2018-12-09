@@ -12,7 +12,7 @@ class dota():
 
 	def __init__(self,appname):
 		self.appname = appname
-		self.liquipedia = liquipediapy(appname)
+		self.liquipedia = liquipediapy(appname,'dota2')
 		self.__image_base_url = 'https://liquipedia.net'
 		
 

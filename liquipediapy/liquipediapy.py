@@ -4,10 +4,11 @@ import requests
 from urllib.request import quote
 
 class liquipediapy():
-	def __init__(self,appname):
+	def __init__(self,appname,game):
 		self.appname = appname
+		self.game = game
 		self.__headers = {'User-Agent': appname,'Accept-Encoding': 'gzip'}
-		self.__base_url = 'https://liquipedia.net/dota2/api.php?'
+		self.__base_url = 'https://liquipedia.net/'+game+'/api.php?'
 
 	def parse(self,page):
 		url = self.__base_url+'action=parse&format=json&page='+page
@@ -31,16 +32,19 @@ class liquipediapy():
 
 
 	def dota2webapi(self,matchId):
-		url = self.__base_url+'action=dota2webapi&data=picks_bans|players|kills_deaths|duration|radiant_win|teams|start_time&format=json&matchid='+matchId
-		response = requests.get(url, headers=self.__headers)
-		if response.status_code == 200:
-			res = response.json()
-			if res['dota2webapi']['isresult'] >= 1:
-				return res['dota2webapi']['result']
+		if self.game == 'dota2':
+			url = self.__base_url+'action=dota2webapi&data=picks_bans|players|kills_deaths|duration|radiant_win|teams|start_time&format=json&matchid='+matchId
+			response = requests.get(url, headers=self.__headers)
+			if response.status_code == 200:
+				res = response.json()
+				if res['dota2webapi']['isresult'] >= 1:
+					return res['dota2webapi']['result']
+				else:
+					return res['dota2webapi']['result']['error']
 			else:
-				return res['dota2webapi']['result']['error']
+				raise ex.RequestsException(response.json(),response.status_code)
 		else:
-			raise ex.RequestsException(response.json(),response.status_code)	
+			raise ex.RequestsException('set game as dota2 to access this api',0)			
 
 
 
