@@ -1,7 +1,5 @@
-import requests
 import liquipediapy.exceptions as ex
 from liquipediapy.liquipediapy import liquipediapy
-from bs4 import BeautifulSoup
 import re
 from liquipediapy.dota_modules.player import dota_player
 from liquipediapy.dota_modules.team import dota_team
