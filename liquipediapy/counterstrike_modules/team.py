@@ -3,7 +3,7 @@ import re
 import itertools
 import unicodedata
 
-class dota_team():
+class cs_team():
 
 
 	def __init__(self):
@@ -35,17 +35,17 @@ class dota_team():
 				team[attribute.lower()] = value_list
 			elif attribute == "Total Earnings":
 				team['earnings'] = int(info_boxes[i+1].get_text().replace('$','').replace(',',''))
-			elif attribute == "Pro Circuit Rank":
-				ranking = {}
-				ranking_list = unicodedata.normalize("NFKD",info_boxes[i+1].get_text()).split()
-				ranking['rank'] = ranking_list[0].replace('#','')
-				ranking['points'] = int(ranking_list[1].replace('(', '').replace(')', '').split(',')[0])
-				team['ranking'] = ranking			
+			elif attribute == "Games":
+				games = []
+				game_values = info_boxes[i+1].find_all('i')	
+				for game in game_values:
+					games.append(game.get_text())
+				team['games'] = games				
 			else:
 				team[attribute.lower()] = unicodedata.normalize("NFKD",info_boxes[i+1].get_text())
 
 
-		return team
+		return team	
 
 	def get_team_links(self,soup):
 		team_links = {}
@@ -58,32 +58,17 @@ class dota_team():
 			site_name = link_list[-2].replace('https://','')
 			team_links[site_name] = link.get('href')
 
-		return team_links
-
-	def get_team_cups(self,soup):
-		team_cups = []
-		info_boxes = soup.find_all('div',class_='infobox-center')
-		cups = []
-		for boxes in info_boxes:
-			cups.append(boxes.find_all('span',class_='league-icon-small-image'))
-		cups = list(itertools.chain.from_iterable(cups))
-		for cup in cups:
-			try:
-				league = cup.find('a').get('title')
-				team_cups.append(league)
-			except AttributeError:
-				pass	
-
-		return team_cups
+		return team_links	
 
 	def get_team_roster(self,soup):
-		roster_cards = soup.find_all('table',class_='roster-card')
+		roster_cards = soup.find_all('table',class_='table-striped')
 		team_roster = roster_cards[0]
 		rows = team_roster.find_all('tr')
 		indexes = rows[1]
 		index_values = []
 		for cell in indexes.find_all('th'):
 			index_values.append(unicodedata.normalize("NFKD",cell.get_text().rstrip()))	
+		index_values[0] = 'Country'
 		rows = rows[2:]
 		players = []
 		for row in rows:
@@ -94,22 +79,27 @@ class dota_team():
 				value = cells[i].get_text().rstrip()
 				if key == "Name":
 					value = value.replace('(','').replace(')','')
+				elif key == "Country":
+					value = cells[i].find('a').get('title')	
 				elif key == "Join Date":
-					value = cells[i].find('div',class_="Date").find(text=True)	
+					value = cells[i].find(text=True)	
 				value = unicodedata.normalize("NFKD",value.rstrip())	
 				player[key] = value
 			players.append(player)	
-		return players
-	
+		return players	
+
 	def get_team_achivements(self,soup):
 		achivements = []
-		rows = soup.find_all('tr')
+		tables = soup.find_all('table',class_='table-striped')
+		table = tables[-1]
+		rows = table.find_all('tr')
 		rows = [row for row in rows if len(row)>10]
 		indexes = rows[0]
 		index_values = []
 		for cell in indexes.find_all('th'):
 			index_values.append(cell.get_text().rstrip())
 		rows = rows[1:]
+		index_values.insert(3,'game')
 		index_values.insert(-1,'opponent')
 		for row in rows:
 			achivement={}
@@ -120,7 +110,7 @@ class dota_team():
 				try:	
 					if key == "Placement":
 						value = re.sub('[A-Za-z]','',cells[i].get_text())
-					elif key == "LP Tier":
+					elif key == "Tier":
 						value = cells[i].find('a').get_text().rstrip()
 					elif value == '':
 						try:
@@ -135,11 +125,4 @@ class dota_team():
 				achivement[key] = value
 			achivements.append(achivement)
 
-		return achivements
-
-		
-
-
-
-					
-
+		return achivements	

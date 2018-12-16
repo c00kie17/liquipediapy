@@ -16,12 +16,14 @@
 
 * FIX ``` get_player_info```: To handle players with confliting names and no redirects like [Fury](https://liquipedia.net/dota2/Fury_(NZ_player)) 
 
+## counterstike
+
+* ADD ```get_tournament_info``` :  gets detailed information a tournament from its page , links are a huge problem here and also the format of the tournament is less arbitary then dota2 still uses differnt format tables across pages.
+
 
 ***
 
 ## Classes To Add  (Games)
-
-* Counter-Strike
 
 * Brood War
 
