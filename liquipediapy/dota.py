@@ -4,7 +4,7 @@ import re
 from liquipediapy.dota_modules.player import dota_player
 from liquipediapy.dota_modules.team import dota_team
 from liquipediapy.dota_modules.pro_circuit import dota_pro_circuit
-
+import unicodedata
 
 class dota():
 
@@ -191,7 +191,7 @@ class dota():
 					key = index_values[i]
 					value = cells[i].get_text().rstrip()
 					if key == "Highlights":
-						value = [val.replace('\xa0','') for val in cells[i].get_text().split('\n') if len(val) > 0]
+						value = [unicodedata.normalize("NFKD",val) for val in cells[i].get_text().split('\n') if len(val) > 0]
 					patch[key] = value
 				patches.append(patch)
 
@@ -226,7 +226,7 @@ class dota():
 				tournament['prize_pool'] = 0
 
 			tournament['teams'] = re.sub('[A-Za-z]','',row.find('div',class_="PlayerNumber").get_text()).rstrip()	
-			location_list= row.find('div',class_="Location").get_text().replace('\xa0','').rstrip().split(',')	
+			location_list= unicodedata.normalize("NFKD",row.find('div',class_="Location").get_text().rstrip()).split(',')	
 			tournament['host_location'] = location_list[0]
 
 			try:
@@ -242,8 +242,8 @@ class dota():
 					site_name = link_list[-2].replace('https://','')
 					tournament['links'].append({site_name:link.get('href')})
 			else:
-				tournament['winner'] = 	row.find('div',class_="FirstPlace").get_text().replace('\xa0','').rstrip()	
-				tournament['runner_up'] = 	row.find('div',class_="SecondPlace").get_text().replace('\xa0','').rstrip()	
+				tournament['winner'] = 	unicodedata.normalize("NFKD",row.find('div',class_="FirstPlace").get_text().rstrip())	
+				tournament['runner_up'] = 	unicodedata.normalize("NFKD",row.find('div',class_="SecondPlace").get_text().rstrip())	
 
 			tournaments.append(tournament)
 

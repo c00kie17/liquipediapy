@@ -6,7 +6,7 @@ with open("README.md", "r",encoding='utf-8') as fh:
 
 setup(
     name='liquipediapy',
-    version = '1.1.0',
+    version = '2.0.0',
     description= 'api for liquipedia.net',
     author = 'c00kie17',
     author_email = 'anshul1708@gmail.com',
