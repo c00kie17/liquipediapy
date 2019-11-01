@@ -143,7 +143,7 @@ class counterstrike():
 
 	def get_upcoming_and_ongoing_games(self):
 		games = []
-		soup,__ = self.liquipedia.parse('Liquipedia:Upcoming_and_ongoing_matches')
+		soup,__ = self.liquipedia.parse('Liquipedia:Matches')
 		matches = soup.find_all('table',class_='infobox_matches_content')
 		for match in matches:
 			game = {}
