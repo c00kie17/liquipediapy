@@ -210,15 +210,19 @@ class dota():
 			tournament = {}
 
 			values = row.find('div',class_="Tournament").get_text().split('\n')
-			tournament['tier'] = re.sub('\W+',' ',values[0]).strip()
-			tournament['name'] = values[1]
+			if tournamentType is None:
+				tournament['tier'] = re.sub('\W+',' ',values[1]).strip()
+				tournament['name'] = row.find('div',class_="mobile-hide").get_text()
+			else:
+				tournament['tier'] = tournamentType
+				tournament['name'] = values[1].strip()
 
 			try:
 				tournament['icon'] = self.__image_base_url+row.find('div',class_="Tournament").find('img').get('src')
 			except AttributeError:
 				pass	
 
-			tournament['dates'] = row.find('div',class_="Date").get_text()
+			tournament['dates'] = row.find('div',class_="Date").get_text().strip()
 
 			try:
 				tournament['prize_pool'] = int(row.find('div',class_="Prize").get_text().rstrip().replace('$','').replace(',',''))
@@ -235,7 +239,7 @@ class dota():
 				pass	
 		
 			if len(row) < 15:
-				links_a = row.find('div',class_="SecondPlace").find_all('a')
+				links_a = row.find_all('a',class_="external text")
 				tournament['links'] = []
 				for link in links_a:
 					link_list = link.get('href').split('.')
