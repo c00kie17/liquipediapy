@@ -306,7 +306,7 @@ gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Port
 
 ##### response
 ````python
-[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania'},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'winner': ' CG', 'runner_up': ' WG.U'}]
+[{'tier': 'Tier 1', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania'},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'winner': ' CG', 'runner_up': ' WG.U'}]
 ````
 ##### example
 ```python
