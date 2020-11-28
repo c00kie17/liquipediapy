@@ -202,8 +202,8 @@ class dota():
 		tournaments = []
 		if tournamentType is None:
 			page_val = 'Portal:Tournaments'
-        elif tournamentType == 'Show Matches':
-            page_val = 'Show_Matches'
+		elif tournamentType == 'Show Matches':
+			page_val = 'Show_Matches'
 		else:
 			page_val = tournamentType.capitalize()+'_Tournaments'				
 		soup,__ = self.liquipedia.parse(page_val)
