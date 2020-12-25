@@ -255,7 +255,7 @@ class dota():
 		try:
 			page,__ = self.liquipedia.parse(tournament_page.replace('https://liquipedia.net/dota2/',''))
 			
-			return f"https://liquipedia.net/dota2{page.find('div',class_='infobox-image').div.div.a.img['src']}"
+			return f"https://liquipedia.net{page.find('div',class_='infobox-image').div.div.a.img['src']}"
 
 		except AttributeError:
 				pass
