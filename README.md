@@ -302,7 +302,7 @@ gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Port
 ##### parameters
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>string</code> | type of tournaments , defaults to ```None``` , accepted values are ```Tier 1``` ,```Tier 2```, ```Tier 3```, ```Tier 4```, ```Qualifier```, ```Monthly```, ```Weekly```|
+| type | <code>string</code> | type of tournaments , defaults to ```None``` , accepted values are ```Tier 1``` ,```Tier 2```, ```Tier 3```, ```Tier 4```, ```Qualifier```, ```Monthly```, ```Weekly```, ```Show Matches```|
 
 ##### response
 ````python
