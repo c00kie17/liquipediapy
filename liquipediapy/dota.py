@@ -221,7 +221,12 @@ class dota():
 			try:
 				tournament['icon'] = self.__image_base_url+row.find('div',class_="divCell Tournament Header").find('img').get('src')
 			except AttributeError:
-				pass	
+				pass
+
+			try:
+				tournament['page'] = self.__image_base_url + values.b.a['href']
+			except AttributeError:
+				pass
 
 			tournament['dates'] = row.find('div',class_="divCell EventDetails Date Header").get_text().strip()
 
@@ -233,7 +238,7 @@ class dota():
 			tournament['teams'] = re.sub('[A-Za-z]','',row.find('div',class_="divCell EventDetails PlayerNumber Header").get_text()).rstrip()	
 			location_list= unicodedata.normalize("NFKD",row.find('div',class_="divCell EventDetails Location Header").get_text().strip()).split(',')
 			tournament['host_location'] = location_list[0]
-             
+
 			winner = row.find('div',class_="divCell Placement FirstPlace")
 			if winner:
 				tournament['winner'] = winner.get_text().strip()
@@ -246,6 +251,15 @@ class dota():
 
 		return tournaments
 
+	def get_tournament_baner(self, tournament_page):
+		try:
+			page,__ = self.liquipedia.parse(tournament_page.replace('https://liquipedia.net/dota2/',''))
+			
+			return f"https://liquipedia.net/dota2{page.find('div',class_='infobox-image').div.div.a.img['src']}"
+
+		except AttributeError:
+				pass
+
 	def get_pro_circuit_details(self):
 		soup,__ = self.liquipedia.parse('Dota_Pro_Circuit/2018-19/Rankings/Full')
 		pro_circuit = {}
@@ -256,7 +270,4 @@ class dota():
 
 
 		return pro_circuit
-	
 
-
-	
