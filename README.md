@@ -302,11 +302,11 @@ gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Port
 ##### parameters
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>string</code> | type of tournaments , defaults to ```None``` , accepted values are ```Premier``` ,```Major```, ```Minor``` , ```Monthly```, ```Weekly```|
+| type | <code>string</code> | type of tournaments , defaults to ```None``` , accepted values are ```Tier 1``` ,```Tier 2```, ```Tier 3```, ```Tier 4```, ```Qualifier```, ```Monthly```, ```Weekly```, ```Show Matches```|
 
 ##### response
 ````python
-[{'tier': 'Major', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania', 'event_location': 'Bucharest', 'links': [{'pglesports': 'http://dota2.pglesports.com/'},...,{'twitter': 'https://twitter.com/pglesports'}]},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'event_location': 'Online', 'winner': ' CG', 'runner_up': ' WG.U'}]
+[{'tier': 'Tier 1', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania'},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'winner': ' CG', 'runner_up': ' WG.U'}]
 ````
 ##### example
 ```python
