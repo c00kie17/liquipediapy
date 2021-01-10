@@ -131,7 +131,8 @@ class dota():
 				game['format'] = cells[1].find('abbr').get_text()
 				game['team2'] = cells[2].find('span',class_='team-template-image').find('a').get('title')
 				game['start_time'] = cells[3].find('span',class_="timer-object").get_text()
-				game['tournament'] = cells[3].find('div').get_text().rstrip()
+				game['tournament'] = cells[3].find('div').a['title']
+				game['tournament_short_name'] = cells[3].find('div').get_text().rstrip()
 				try:
 					game['twitch_channel'] = cells[3].find('span',class_="timer-object").get('data-stream-twitch')
 				except AttributeError:
