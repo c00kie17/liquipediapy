@@ -238,7 +238,7 @@ gets all matches from [Liquipedia:Upcoming_and_ongoing_matches](https://liquiped
 
 ##### response
 ````python
-[{'team1': 'WP Gaming', 'format': 'Bo3', 'team2': 'Playmakers Esports', 'start_time': 'December 5, 2018 - 2:00 UTC', 'tournament': 'The Bucharest Minor SA Qual', 'twitch_channel': None},...,{'team1': 'Doge (Singaporean team)', 'format': 'Bo1', 'team2': 'Casuals', 'start_time': 'December 15, 2018 - 9:00 UTC', 'tournament': 'SEL Season 2', 'twitch_channel': 'sgpesports'}]
+[{'team1': 'B8', 'format': 'Bo3', 'team2': 'EXTREMUM', 'start_time': 'January 11, 2021 - 10:00 UTC', 'tournament': 'ESL One CIS Online Season 1: Decider Tournament', 'tournament_short_name': 'ESL One CIS S1: Decider', 'twitch_channel': None},...,{'team1': 'NoPangolier', 'format': 'Bo3', 'team2': 'Winstrike Team', 'start_time': 'January 11, 2021 - 13:00 UTC', 'tournament': 'ESL One CIS Online Season 1: Decider Tournament', 'tournament_short_name': 'ESL One CIS S1: Decider', 'twitch_channel': None}]
 ````
 ##### example
 ```python
