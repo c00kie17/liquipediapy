@@ -70,6 +70,17 @@ class dota():
 
 		return player
 
+
+	def get_teams(self):
+		soup,__ = self.liquipedia.parse('Portal:Teams')
+		teams = []
+		templates = soup.find_all('span',class_="team-template-team-standard")
+		for team in templates:
+			teams.append(team.a['title'])
+			
+		return teams
+
+
 	def get_team_info(self,teamName,results=False):
 		team_object = dota_team()
 		teamName = team_object.process_teamName(teamName)	
