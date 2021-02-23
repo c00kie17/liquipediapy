@@ -30,6 +30,7 @@ The [examples](https://github.com/c00kie17/liquipediapy/tree/master/examples) di
 - [dota](#dota)
   - [get_players](#dota_get_players)
   - [get_player_info](#dota_get_player_info)
+  - [get_teams](#dota_get_teams)
   - [get_team_info](#dota_get_team_info)
   - [get_transfers](#get_transfers)
   - [get_upcoming_and_ongoing_games](#dota_get_upcoming_and_ongoing_games)
@@ -37,6 +38,7 @@ The [examples](https://github.com/c00kie17/liquipediapy/tree/master/examples) di
   - [get_items](#dota_get_items)
   - [get_patches](#dota_get_patches)
   - [get_tournaments](#dota_get_tournaments)
+  - [get_tournament_baner](#dota_get_tournament_baner)
   - [get_pro_circuit_details](#dota_get_pro_circuit_details)
 - [counterstrike](#counterstrike) 
   - [get_players](#counterstrike_get_players)
@@ -191,6 +193,21 @@ player_details = dota_obj.get_player_info('Miracle-',True)
 ***
 
 
+<a name="dota_get_teams"></a>
+#### get_teams()
+return all active and inactive teams from Portal:Teams
+
+##### response
+````python
+['Cyber Legacy', 'Effect',....,'FlyToMoon', 'ForZe']
+````
+
+##### example
+````python
+teams = dota_obj.get_teams()
+````
+***
+
 <a name="dota_get_team_info"></a>  
 #### get_team_info(teamName,results)
 gets information for a specified team
@@ -306,7 +323,7 @@ gets all tournaments from [Portal:Tournaments](https://liquipedia.net/dota2/Port
 
 ##### response
 ````python
-[{'tier': 'Tier 1', 'name': ' The Bucharest Minor', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Mihttps://github.com/c00kie17/liquipediapy/blob/master/CONTRIBUTING.mdnor_icon.png', 'dates': 'Jan 9 - 13, 2019', 'prize_pool': 300000, 'teams': '8', 'host_location': 'Romania'},...,{'tier': 'Qualifier', 'name': ' The Bucharest Minor Southeast Asia Open Qualifier', 'icon': 'https://liquipedia.net/commons/images/e/ed/The_Bucharest_Minor_icon.png', 'dates': 'Dec 1 - 3, 2018', 'prize_pool': 0, 'teams': '82', 'host_location': 'Southeast Asia', 'winner': ' CG', 'runner_up': ' WG.U'}]
+[{'tier': 'Qualifier', 'name': 'DreamLeague Season 14 DPC EU Decider Tournament', 'icon': 'https://liquipedia.net/commons/images/9/96/Dreamleague_logo_small.png', 'page': 'https://liquipedia.net/dota2/Dota_Pro_Circuit/2021/1/Europe/Decider_Tournament', 'dates': 'Jan 07 - 10, 2021', 'prize_pool': 0, 'teams': '8', 'host_location': 'Europe', 'winner': 'TBD', 'runner_up': 'TBD'},...,{'tier': 'Tier 4', 'name': 'Moscow Esports 2020 S2 Superfinal', 'icon': 'https://liquipedia.net/commons/images/b/b6/Moscowesport.png', 'page': 'https://liquipedia.net/dota2/Moscow_Esports/7', 'dates': 'Dec 19 - 20, 2020', 'prize_pool': 2039, 'teams': '16', 'host_location': 'Russia', 'winner': 'Blstrbl', 'runner_up': 'NP'}]
 ````
 ##### example
 ```python
@@ -314,6 +331,25 @@ tournaments = dota_obj.get_tournaments()
 ```
 ***
 
+
+<a name="dota_get_tournament_baner"></a>  
+#### get_tournament_baner(url)
+gets baner url from tournament page
+
+##### parameters
+| Param | Type |
+| --- | --- |
+| url | <code>string</code> | 
+
+##### response
+````python
+'https://liquipedia.net/commons/images/thumb/0/0b/IeSF_2020.png/600px-IeSF_2020.png'
+````
+##### example
+```python
+tournaments = dota_obj.get_tournament_baner('https://liquipedia.net/dota2/IeSF_World_Championship/2020')
+```
+***
 
 
 <a name="dota_get_pro_circuit_details"></a>  
