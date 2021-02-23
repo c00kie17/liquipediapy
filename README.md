@@ -30,6 +30,7 @@ The [examples](https://github.com/c00kie17/liquipediapy/tree/master/examples) di
 - [dota](#dota)
   - [get_players](#dota_get_players)
   - [get_player_info](#dota_get_player_info)
+  - [get_teams](#dota_get_teams)
   - [get_team_info](#dota_get_team_info)
   - [get_transfers](#get_transfers)
   - [get_upcoming_and_ongoing_games](#dota_get_upcoming_and_ongoing_games)
@@ -191,6 +192,21 @@ player_details = dota_obj.get_player_info('Miracle-',True)
 ```
 ***
 
+
+<a name="dota_get_teams"></a>
+#### get_teams()
+return all active and inactive teams from Portal:Teams
+
+##### response
+````python
+['Cyber Legacy', 'Effect',....,'FlyToMoon', 'ForZe']
+````
+
+##### example
+````python
+teams = dota_obj.get_teams()
+````
+***
 
 <a name="dota_get_team_info"></a>  
 #### get_team_info(teamName,results)
