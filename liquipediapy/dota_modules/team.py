@@ -18,7 +18,7 @@ class dota_team():
 	def get_team_infobox(self,soup):
 		team = {}
 		try:
-			image_url = soup.find('div', class_='infobox-image').find('img').get('src')	
+			image_url = soup.find('div', class_='img-responsive').find('img').get('src')	
 			team['image'] = self.__image_base_url+image_url
 		except AttributeError:
 			team['image'] = ''			
