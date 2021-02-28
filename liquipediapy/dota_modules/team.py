@@ -35,14 +35,15 @@ class dota_team():
 				team[attribute.lower()] = value_list
 			elif attribute == "Total Earnings":
 				team['earnings'] = int(info_boxes[i+1].get_text().replace('$','').replace(',',''))
-			elif attribute == "Pro Circuit Rank":
-				ranking = {}
-				ranking_list = unicodedata.normalize("NFKD",info_boxes[i+1].get_text()).split()
-				ranking['rank'] = ranking_list[0].replace('#','')
-				ranking['points'] = int(ranking_list[1].replace('(', '').replace(')', '').split(',')[0])
-				team['ranking'] = ranking			
+			# not available now
+			#elif attribute == "Pro Circuit Rank":
+			#	ranking = {}
+			#	ranking_list = unicodedata.normalize("NFKD",info_boxes[i+1].get_text()).split()
+			#	ranking['rank'] = ranking_list[0].replace('#','')
+			#	ranking['points'] = int(ranking_list[1].replace('(', '').replace(')', '').split(',')[0])
+			#	team['ranking'] = ranking			
 			else:
-				team[attribute.lower()] = unicodedata.normalize("NFKD",info_boxes[i+1].get_text())
+				team[attribute.lower()] = unicodedata.normalize("NFKD",info_boxes[i+1].get_text().strip())
 
 
 		return team
@@ -91,13 +92,16 @@ class dota_team():
 			cells = row.find_all('td')
 			for i in range(0,len(cells)):
 				key = index_values[i]
-				value = cells[i].get_text().rstrip()
+				value = cells[i].get_text().strip()
 				if key == "Name":
 					value = value.replace('(','').replace(')','')
 				elif key == "Join Date":
 					value = cells[i].find('div',class_="Date").find(text=True)	
+				elif key == "Position":
+					value = value.split()[-1]
 				value = unicodedata.normalize("NFKD",value.rstrip())	
-				player[key] = value
+				if len(key) > 0:
+					player[key] = value
 			players.append(player)	
 		return players
 	
