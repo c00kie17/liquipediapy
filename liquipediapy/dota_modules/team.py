@@ -107,43 +107,24 @@ class dota_team():
 	
 	def get_team_achivements(self,soup):
 		achivements = []
-		rows = soup.find_all('tr')
-		rows = [row for row in rows if len(row)>10]
-		indexes = rows[0]
-		index_values = []
-		for cell in indexes.find_all('th'):
-			index_values.append(cell.get_text().rstrip())
-		rows = rows[1:]
-		index_values.insert(-1,'opponent')
-		for row in rows:
-			achivement={}
-			cells = row.find_all('td')
-			for i in range(0,len(cells)):
-				key = index_values[i]
-				value = cells[i].get_text().rstrip()
-				try:	
-					if key == "Placement":
-						value = re.sub('[A-Za-z]','',cells[i].get_text())
-					elif key == "LP Tier":
-						value = cells[i].find('a').get_text().rstrip()
-					elif value == '':
-						try:
-							value = cells[i].find('a').get('title')
-						except AttributeError:
-							pass	
-					elif key == "Results":
-						value = cells[i].get_text()
-				except AttributeError:
-					pass		
-				value = unicodedata.normalize("NFKD",value.rstrip())	
-				achivement[key] = value
-			achivements.append(achivement)
+		rows = soup.find_all("tr")
+		for tag in rows:
+			if len(tag) == 8:
+				result = {}
+				result["Data"] = tag.find("td").get_text()
+				result["Placement"] = tag.find("font", class_="placement-text").get_text()
+				result["Tier"] = tag.find("a").get_text()
+				result["Tournament"] = tag.find("td", attrs={"style": "text-align:left"}).get_text()
+				result["Results"] = tag.find("td", class_="results-score").get_text()
+				try:
+					result["Opponent"] = tag.find("td", class_="results-team-icon").find("a")["title"]
+				except TypeError:
+					result["Opponent"] = "Grp S."
+				result["Prize"] = tag.find_all("td", attrs={"style": "text-align:left"})[1].get_text()
+
+				for key, value in result.items():
+					result[key] = unicodedata.normalize("NFKD", value)
+				achivements.append(result)
 
 		return achivements
-
-		
-
-
-
-					
 
