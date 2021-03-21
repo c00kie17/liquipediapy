@@ -104,27 +104,48 @@ class dota_team():
 					player[key] = value
 			players.append(player)	
 		return players
-	
+
+
 	def get_team_achivements(self,soup):
 		achivements = []
 		rows = soup.find_all("tr")
-		for tag in rows:
-			if len(tag) == 8:
-				result = {}
-				result["Data"] = tag.find("td").get_text()
-				result["Placement"] = tag.find("font", class_="placement-text").get_text()
-				result["Tier"] = tag.find("a").get_text()
-				result["Tournament"] = tag.find("td", attrs={"style": "text-align:left"}).get_text()
-				result["Results"] = tag.find("td", class_="results-score").get_text()
-				try:
-					result["Opponent"] = tag.find("td", class_="results-team-icon").find("a")["title"]
-				except TypeError:
-					result["Opponent"] = "Grp S."
-				result["Prize"] = tag.find_all("td", attrs={"style": "text-align:left"})[1].get_text()
+		for row in rows:
+			try:
+				if len(row) == 8:
+					match = {}
+					attrs = {"style": "text-align:left"}
+					icon = "results-team-icon"
 
-				for key, value in result.items():
-					result[key] = unicodedata.normalize("NFKD", value)
-				achivements.append(result)
+					match["Date"] = row.find("td").get_text()
+					place = row.find("font", class_="placement-text").get_text()
+					match["Placement"] = re.sub("[A-Za-z]", "", place)
+					match["Tier"] = row.find("a").get_text()
+					match["Tournament"] = row.find("td", attrs).get_text()
+					match["Results"] = row.find(
+                        "td", class_="results-score"
+                    ).get_text()
+					try:
+						match["opponent"] = row.find(
+                            "td", class_=icon
+                        ).find("a")["title"]
+					except TypeError:
+						try:
+							match["opponent"] = row.find(
+                                "td", class_=icon
+                            ).find("abbr")["title"]
+						except:
+							match["opponent"] = ""
+					match["Prize"] = row.find_all("td", attrs)[1].get_text()
 
+					for key, value in match.items():
+						match[key] = unicodedata.normalize("NFKD", value)
+
+					match["Placement"] = match["Placement"].replace(" ", "") 
+					match["Results"] = match["Results"].replace(" ", "")
+
+					achivements.append(match)
+			except AttributeError:
+				pass
+			
 		return achivements
 

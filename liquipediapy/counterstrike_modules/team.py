@@ -60,69 +60,90 @@ class cs_team():
 
 		return team_links	
 
+
 	def get_team_roster(self,soup):
-		roster_cards = soup.find_all('table',class_='table-striped')
-		team_roster = roster_cards[0]
-		rows = team_roster.find_all('tr')
-		indexes = rows[1]
-		index_values = []
-		for cell in indexes.find_all('th'):
-			index_values.append(unicodedata.normalize("NFKD",cell.get_text().rstrip()))	
-		index_values[0] = 'Country'
-		rows = rows[2:]
+		roster = soup.find(
+			"table",class_="wikitable wikitable-striped sortable"
+		).find("tbody")
+		rows = roster.find_all("tr")
 		players = []
-		for row in rows:
-			player={}
-			cells = row.find_all('td')
-			for i in range(0,len(cells)):
-				key = index_values[i]
-				value = cells[i].get_text().rstrip()
-				if key == "Name":
-					value = value.replace('(','').replace(')','')
-				elif key == "Country":
-					value = cells[i].find('a').get('title')	
-				elif key == "Join Date":
-					value = cells[i].find(text=True)	
-				value = unicodedata.normalize("NFKD",value.rstrip())	
-				player[key] = value
-			players.append(player)	
-		return players	
+		for tag in rows:
+			player = {}
+			try:
+				player["Country"] = tag.find("span", class_="flag").a["title"]
+				player["ID"] = (
+					tag.find(
+						"span", attrs={"style": "white-space: pre"}
+					).a["title"]
+				)
+				player["Name"] = (
+					tag.find(
+						"td", attrs={"style": "text-indent:4px"}
+					).get_text()
+					.strip()
+				)
+				player["Join Date"] = (
+					tag.find(
+						"td", attrs={"align": "center", "style": "font-style:italic"}
+					).get_text()
+					.split()[0]
+				)
+				players.append(player)
+			except AttributeError:
+				pass
+
+		return players
+
 
 	def get_team_achivements(self,soup):
 		achivements = []
-		tables = soup.find_all('table',class_='table-striped')
-		table = tables[-1]
-		rows = table.find_all('tr')
-		rows = [row for row in rows if len(row)>10]
-		indexes = rows[0]
-		index_values = []
-		for cell in indexes.find_all('th'):
-			index_values.append(cell.get_text().rstrip())
-		rows = rows[1:]
-		index_values.insert(3,'game')
-		index_values.insert(-1,'opponent')
+		rows = soup.find_all("tr")
 		for row in rows:
-			achivement={}
-			cells = row.find_all('td')
-			for i in range(0,len(cells)):
-				key = index_values[i]
-				value = cells[i].get_text().rstrip()
-				try:	
-					if key == "Placement":
-						value = re.sub('[A-Za-z]','',cells[i].get_text())
-					elif key == "Tier":
-						value = cells[i].find('a').get_text().rstrip()
-					elif value == '':
-						try:
-							value = cells[i].find('a').get('title')
-						except AttributeError:
-							pass	
-					elif key == "Results":
-						value = cells[i].get_text()
-				except AttributeError:
-					pass		
-				value = unicodedata.normalize("NFKD",value.rstrip())	
-				achivement[key] = value
-			achivements.append(achivement)
+			try:
+				if len(row)>8:
+					match = {}
+					attrs = {"style": "text-align:left"}
+					icon = "results-team-icon"
 
-		return achivements	
+					match["Date"] = row.find("td").get_text()
+					place = row.find(
+						"b", attrs={"style": "white-space:nowrap"}
+					).get_text()
+					match["Placement"] = re.sub("[A-Za-z]", "", place) 
+					match["Tier"] = row.find("a").get_text()
+					match["Type"] = row.find_all("td")[3].get_text()
+					match["game"] = row.find_all("a")[1]["title"]
+					try:
+						match["Tournament"] = row.find("td", attrs).get_text()
+					except AttributeError:
+						match["Tournament"] = row.find(
+							"td", attrs={"style": "text-align:left;"}
+						).get_text()
+					match["Results"] = row.find(
+						"td", class_="results-score"
+					).get_text()
+					try:
+						match["opponent"] = row.find(
+							"td", class_=icon
+						).find("a")["title"] 
+					except TypeError:
+						try:
+							match["opponent"] = row.find(
+								"td", class_=icon
+							).find("abbr")["title"]
+						except:
+							match["opponent"] = ""
+					match["Prize"] = row.find_all("td")[-1].get_text()
+
+					for key, value in match.items():
+						match[key] = unicodedata.normalize("NFKD", value).rstrip()
+
+					match["Placement"] = match["Placement"].replace(" ", "")
+					match["Results"] = match["Results"].replace(" ", "")
+
+					achivements.append(match)
+			except AttributeError:
+				pass
+
+		return achivements
+
