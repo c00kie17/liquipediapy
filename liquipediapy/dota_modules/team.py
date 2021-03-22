@@ -18,7 +18,7 @@ class dota_team():
 	def get_team_infobox(self,soup):
 		team = {}
 		try:
-			image_url = soup.find('div', class_='infobox-image').find('img').get('src')	
+			image_url = soup.find('div', class_='img-responsive').find('img').get('src')	
 			team['image'] = self.__image_base_url+image_url
 		except AttributeError:
 			team['image'] = ''			
@@ -35,14 +35,15 @@ class dota_team():
 				team[attribute.lower()] = value_list
 			elif attribute == "Total Earnings":
 				team['earnings'] = int(info_boxes[i+1].get_text().replace('$','').replace(',',''))
-			elif attribute == "Pro Circuit Rank":
-				ranking = {}
-				ranking_list = unicodedata.normalize("NFKD",info_boxes[i+1].get_text()).split()
-				ranking['rank'] = ranking_list[0].replace('#','')
-				ranking['points'] = int(ranking_list[1].replace('(', '').replace(')', '').split(',')[0])
-				team['ranking'] = ranking			
+			# not available now
+			#elif attribute == "Pro Circuit Rank":
+			#	ranking = {}
+			#	ranking_list = unicodedata.normalize("NFKD",info_boxes[i+1].get_text()).split()
+			#	ranking['rank'] = ranking_list[0].replace('#','')
+			#	ranking['points'] = int(ranking_list[1].replace('(', '').replace(')', '').split(',')[0])
+			#	team['ranking'] = ranking			
 			else:
-				team[attribute.lower()] = unicodedata.normalize("NFKD",info_boxes[i+1].get_text())
+				team[attribute.lower()] = unicodedata.normalize("NFKD",info_boxes[i+1].get_text().strip())
 
 
 		return team
@@ -91,55 +92,60 @@ class dota_team():
 			cells = row.find_all('td')
 			for i in range(0,len(cells)):
 				key = index_values[i]
-				value = cells[i].get_text().rstrip()
+				value = cells[i].get_text().strip()
 				if key == "Name":
 					value = value.replace('(','').replace(')','')
 				elif key == "Join Date":
 					value = cells[i].find('div',class_="Date").find(text=True)	
+				elif key == "Position":
+					value = value.split()[-1]
 				value = unicodedata.normalize("NFKD",value.rstrip())	
-				player[key] = value
+				if len(key) > 0:
+					player[key] = value
 			players.append(player)	
 		return players
-	
+
+
 	def get_team_achivements(self,soup):
 		achivements = []
-		rows = soup.find_all('tr')
-		rows = [row for row in rows if len(row)>10]
-		indexes = rows[0]
-		index_values = []
-		for cell in indexes.find_all('th'):
-			index_values.append(cell.get_text().rstrip())
-		rows = rows[1:]
-		index_values.insert(-1,'opponent')
+		rows = soup.find_all("tr")
 		for row in rows:
-			achivement={}
-			cells = row.find_all('td')
-			for i in range(0,len(cells)):
-				key = index_values[i]
-				value = cells[i].get_text().rstrip()
-				try:	
-					if key == "Placement":
-						value = re.sub('[A-Za-z]','',cells[i].get_text())
-					elif key == "LP Tier":
-						value = cells[i].find('a').get_text().rstrip()
-					elif value == '':
+			try:
+				if len(row) == 8:
+					match = {}
+					attrs = {"style": "text-align:left"}
+					icon = "results-team-icon"
+
+					match["Date"] = row.find("td").get_text()
+					place = row.find("font", class_="placement-text").get_text()
+					match["Placement"] = re.sub("[A-Za-z]", "", place)
+					match["Tier"] = row.find("a").get_text()
+					match["Tournament"] = row.find("td", attrs).get_text()
+					match["Results"] = row.find(
+                        "td", class_="results-score"
+                    ).get_text()
+					try:
+						match["opponent"] = row.find(
+                            "td", class_=icon
+                        ).find("a")["title"]
+					except TypeError:
 						try:
-							value = cells[i].find('a').get('title')
-						except AttributeError:
-							pass	
-					elif key == "Results":
-						value = cells[i].get_text()
-				except AttributeError:
-					pass		
-				value = unicodedata.normalize("NFKD",value.rstrip())	
-				achivement[key] = value
-			achivements.append(achivement)
+							match["opponent"] = row.find(
+                                "td", class_=icon
+                            ).find("abbr")["title"]
+						except:
+							match["opponent"] = ""
+					match["Prize"] = row.find_all("td", attrs)[1].get_text()
 
+					for key, value in match.items():
+						match[key] = unicodedata.normalize("NFKD", value)
+
+					match["Placement"] = match["Placement"].replace(" ", "") 
+					match["Results"] = match["Results"].replace(" ", "")
+
+					achivements.append(match)
+			except AttributeError:
+				pass
+			
 		return achivements
-
-		
-
-
-
-					
 
