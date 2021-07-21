@@ -10,7 +10,7 @@ teams = dota_obj.get_teams(False)
 
 teams_disbanded = dota_obj.get_teams(True)
 
-team_details = dota_obj.get_team_info('Team Liquid',True)
+team_details = dota_obj.get_team_info("Team Liquid", True)
 
 transfers = dota_obj.get_transfers()
 

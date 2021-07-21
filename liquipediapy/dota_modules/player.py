@@ -117,6 +117,8 @@ class dota_player:
     def get_player_statistics(self, soup):
         stats = []
         table = soup.find("table", {"class": "wikitable"})
+        if table == None or "wikitable-striped" in table["class"]:
+            return []
 
         headers = table.findChildren("th", recursive=True)
         stat_headers = []
