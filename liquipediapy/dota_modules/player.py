@@ -1,11 +1,12 @@
 import re
 from urllib.request import quote
 import unicodedata
+from liquipediapy.dota_modules.common import DotaCommon
 
 
-class dota_player:
+class DotaPlayer(DotaCommon):
     def __init__(self):
-        self.__image_base_url = "https://liquipedia.net"
+        super().__init__()
         self.__player_exceptions = [
             "Fade",
             "ghost",
@@ -23,7 +24,7 @@ class dota_player:
         try:
             image_url = soup.find("div", class_="infobox-image").find("img").get("src")
             if "PlayerImagePlaceholder" not in image_url:
-                player["image"] = self.__image_base_url + image_url
+                player["image"] = self.image_base_url + str(image_url)
             else:
                 player["image"] = ""
         except AttributeError:
@@ -115,96 +116,64 @@ class dota_player:
         return player_history
 
     def get_player_statistics(self, soup):
-        stats = []
         table = soup.find("table", {"class": "wikitable"})
-        if table == None or "wikitable-striped" in table["class"]:
-            return []
-
-        headers = table.findChildren("th", recursive=True)
-        stat_headers = []
-        for head in headers:
-            stat_headers.append(unicodedata.normalize("NFKD", head.text.strip()))
-
-        rows = table.findChildren("tr")
-        for row in rows:
-            data = row.findChildren("td", recursive=False)
-            if len(data) == 0:
-                continue
-            stat = {}
-            for i, header in enumerate(stat_headers):
-                stat[header] = data[i].text.strip()
-            stats.append(stat)
-
+        stats = self.read_wikitable(table, [])
         return stats
 
-    def get_player_achievements(self, soup):
+    def __get_span_class(self, spans, class_name):
+        found_spans = []
+        for span in spans:
+            if span.has_attr("class"):
+                if class_name in span["class"]:
+                    found_spans.append(span)
+        return found_spans
 
-        size = 7
-        achievements = []
+    def get_player_achievements(self, soup):
         table = soup.find("table", {"class": "wikitable-striped"})
 
-        headers = table.findChildren("th", recursive=True)
-        achievements_headers = []
-        for head in headers:
-            achievements_headers.append(head.text)
+        def handle_place(data):
+            return data.text.replace(data.findChild("span").text, "")
 
-        achivements_headers = achievements_headers[:size]
+        def handle_tier(data):
+            return data.find("a").text
 
-        rows = table.findChildren("tr")
-        achievement_rows = []
-        for row in rows:
-            if row.find("td", {"class": "results-score"}):
-                achievement_rows.append(row)
+        def handle_tournament_icon(data):
+            spans = data.findChildren("span")
+            span = self.__get_span_class(spans, "league-icon-small-image")[0]
+            try:
+                return self.image_base_url + span.find("a").find("img")["src"]
+            except AttributeError:
+                return ""
 
-        if len(achievement_rows) == 0:
-            return achievements
+        def handle_result(data):
+            return unicodedata.normalize("NFKD", data.text.rstrip())
 
-        for row in achievement_rows:
-            data = row.findChildren("td", recursive=False)
-            achievement = {}
-            counter = 0
-            for header in achivements_headers:
-                image_counters = [3, 5, 7]
-                if counter in image_counters:
-                    spans = data[counter].findChildren("span")
-                    key = ""
-                    if counter == 3:
-                        key = "tournament_icon"
-                        counter += 1
-                        span_class = "league-icon-small-image"
-                    elif counter == 5 or counter == 7:
-                        if counter == 5:
-                            key = "team_icon"
-                        elif counter == 7:
-                            key = "opponent_team_icon"
-                            counter += 1
-                        span_class = "team-template-team-icon"
-                    for span in spans:
-                        if span.has_attr("class"):
-                            if span_class in span["class"]:
-                                try:
-                                    achievement[key] = (
-                                        self.__image_base_url
-                                        + span.find("a").find("img")["src"]
-                                    )
-                                except AttributeError:
-                                    pass
+        def handle_opponent(data):
+            return data.find("a")["title"].rstrip()
 
-                if header == "Place":
-                    value = data[counter].text.replace(
-                        data[counter].findChild("span").text, ""
-                    )
-                elif header == "Tier":
-                    value = data[counter].find("a").text
-                else:
-                    value = data[counter].text
-
-                achievement[header] = unicodedata.normalize("NFKD", value.rstrip())
-                counter += 1
-
-            achievements.append(achievement)
-
-        return achievements
+        return self.read_wikitable(
+            table,
+            [
+                {"place": 1, "func": handle_place},
+                {"place": 2, "func": handle_tier},
+                {
+                    "place": 3,
+                    "func": handle_tournament_icon,
+                    "skip": True,
+                    "key": "tournament_icon",
+                },
+                {
+                    "place": 6,
+                    "func": handle_result,
+                },
+                {
+                    "place": 7,
+                    "func": handle_opponent,
+                    "skip": True,
+                    "key": "opponent",
+                },
+            ],
+        )
 
     def process_playerName(self, playerName):
         if playerName in self.__player_exceptions:

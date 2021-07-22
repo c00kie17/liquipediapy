@@ -1,27 +1,31 @@
-from liquipediapy import dota
+from liquipediapy import Dota
 
-dota_obj = dota("appname")
+dota_obj = Dota("appname")
 
-players = dota_obj.get_players()
+# players = dota_obj.get_players()
 
-player_details = dota_obj.get_player_info("Miracle-", False)
+# player_details = dota_obj.get_player_info("Miracle-", False)
 
-teams = dota_obj.get_teams(False)
+# teams = dota_obj.get_teams()
 
-teams_disbanded = dota_obj.get_teams(True)
+# teams_disbanded = dota_obj.get_teams(True)
 
-team_details = dota_obj.get_team_info("Team Liquid", True)
+team_details = dota_obj.get_team_info("Team Liquid", False)
+print(team_details)
 
-transfers = dota_obj.get_transfers()
+# transfers = dota_obj.get_transfers()
 
-games = dota_obj.get_upcoming_and_ongoing_games()
+# games = dota_obj.get_upcoming_and_ongoing_games()
 
-heros = dota_obj.get_heros()
+# heros = dota_obj.get_heros()
+# print(heros)
 
-items = dota_obj.get_items()
+# items = dota_obj.get_items()
+# print(items)
 
-patches = dota_obj.get_patches()
+# patches = dota_obj.get_patches()
+# print(patches)
 
-tournaments = dota_obj.get_tournaments()
+# tournaments = dota_obj.get_tournaments()
 
-pro_circuit_details = dota_obj.get_pro_circuit_details()
+# pro_circuit_details = dota_obj.get_pro_circuit_details()
