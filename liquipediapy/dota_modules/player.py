@@ -117,16 +117,10 @@ class DotaPlayer(DotaCommon):
 
     def get_player_statistics(self, soup):
         table = soup.find("table", {"class": "wikitable"})
-        stats = self.read_wikitable(table, [])
+        stats = self.read_wikitable(
+            table, self.handle_header_wikitable, self.handle_row_wikitable, []
+        )
         return stats
-
-    def __get_span_class(self, spans, class_name):
-        found_spans = []
-        for span in spans:
-            if span.has_attr("class"):
-                if class_name in span["class"]:
-                    found_spans.append(span)
-        return found_spans
 
     def get_player_achievements(self, soup):
         table = soup.find("table", {"class": "wikitable-striped"})
@@ -139,7 +133,7 @@ class DotaPlayer(DotaCommon):
 
         def handle_tournament_icon(data):
             spans = data.findChildren("span")
-            span = self.__get_span_class(spans, "league-icon-small-image")[0]
+            span = self.get_span_class(spans, "league-icon-small-image")[0]
             try:
                 return self.image_base_url + span.find("a").find("img")["src"]
             except AttributeError:
@@ -153,6 +147,8 @@ class DotaPlayer(DotaCommon):
 
         return self.read_wikitable(
             table,
+            self.handle_header_wikitable,
+            self.handle_row_wikitable,
             [
                 {"place": 1, "func": handle_place},
                 {"place": 2, "func": handle_tier},

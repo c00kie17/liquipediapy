@@ -2,9 +2,10 @@ from urllib.request import quote
 import re
 import itertools
 import unicodedata
+from liquipediapy.dota_modules.common import DotaCommon
 
 
-class DotaTeam:
+class DotaTeam(DotaCommon):
     def __init__(self):
         super().__init__()
 
@@ -17,7 +18,9 @@ class DotaTeam:
     def get_team_infobox(self, soup):
         team = {}
         try:
-            image_url = soup.find("div", class_="img-responsive").find("img").get("src")
+            image_url = (
+                soup.find("div", {"class": "img-responsive"}).find("img").get("src")
+            )
             team["image"] = self.image_base_url + image_url
         except AttributeError:
             team["image"] = ""
@@ -72,71 +75,180 @@ class DotaTeam:
 
         return team_cups
 
-    def get_team_roster(self, soup):
+    def __get_roster_card_by_title(self, soup, title):
         roster_cards = soup.find_all("table", class_="roster-card")
-        team_roster = roster_cards[0]
-        rows = team_roster.find_all("tr")
-        indexes = rows[1]
-        index_values = []
-        for cell in indexes.find_all("th"):
-            index_values.append(unicodedata.normalize("NFKD", cell.get_text().rstrip()))
-        rows = rows[2:]
-        players = []
-        for row in rows:
-            player = {}
-            cells = row.find_all("td")
-            for i in range(0, len(cells)):
-                key = index_values[i]
-                value = cells[i].get_text().strip()
-                if key == "Name":
-                    value = value.replace("(", "").replace(")", "")
-                elif key == "Join Date":
-                    value = cells[i].find("div", class_="Date").find(text=True)
-                elif key == "Position":
-                    value = value.split()[-1]
-                value = unicodedata.normalize("NFKD", value.rstrip())
-                if len(key) > 0:
-                    player[key] = value
-            players.append(player)
-        return players
+        filtered_cards = []
+        for card in roster_cards:
+            title_row = card.find("tr").find("th")
+            a = title_row.text.strip()
+            if title_row.text.strip() == title:
+                filtered_cards.append(card)
+        return filtered_cards
 
-    def get_team_achivements(self, soup):
-        achivements = []
-        rows = soup.find_all("tr")
-        for row in rows:
+    def get_team_roster(self, soup):
+        card = self.__get_roster_card_by_title(soup, "Active Squad")[0]
+
+        def handle_country(data):
+            return data.find("span", {"class": "flag"}).find("a").get("title")
+
+        def handle_join_date(data):
+            return data.find("div", {"class": "Date"}).find(text=True, recursive=False)
+
+        return self.read_wikitable(
+            card,
+            self.handle_header_roster_card,
+            self.handle_row_wikitable,
+            [
+                {"place": 0, "add": True, "key": "Country", "func": handle_country},
+                {"place": 3, "func": handle_join_date},
+            ],
+        )
+
+    def get_team_org(self, soup):
+        card = self.__get_roster_card_by_title(soup, "Organization")[0]
+
+        def handle_country(data):
+            return data.find("span", {"class": "flag"}).find("a").get("title")
+
+        def handle_join_date(data):
+            return data.find("div", {"class": "Date"}).find(text=True, recursive=False)
+
+        return self.read_wikitable(
+            card,
+            self.handle_header_roster_card,
+            self.handle_row_wikitable,
+            [
+                {"place": 0, "add": True, "key": "Country", "func": handle_country},
+                {"place": 3, "func": handle_join_date},
+            ],
+        )
+
+    def get_former_team(self, soup):
+        card = self.__get_roster_card_by_title(soup, "Former Organization")[0]
+
+        def handle_country(data):
+            return data.find("span", {"class": "flag"}).find("a").get("title")
+
+        def handle_join_leave_date(data):
+            return data.find("div", {"class": "Date"}).find(text=True, recursive=False)
+
+        return self.read_wikitable(
+            card,
+            self.handle_header_roster_card,
+            self.handle_row_wikitable,
+            [
+                {"place": 0, "add": True, "key": "Country", "func": handle_country},
+                {"place": 3, "func": handle_join_leave_date},
+                {"place": 4, "func": handle_join_leave_date},
+            ],
+        )
+
+    def get_team_achivements(self, table):
+        def handle_place(data):
+            return unicodedata.normalize(
+                "NFKD", data.text.replace(data.findChild("span").text, "")
+            )
+
+        def handle_tier(data):
+            return data.find("a").text
+
+        def handle_tournament_icon(data):
+            spans = data.findChildren("span")
+            span = self.get_span_class(spans, "league-icon-small-image")
+            if len(span) == 0:
+                return ""
+
+            span = span[0]
             try:
-                if len(row) == 8:
-                    match = {}
-                    attrs = {"style": "text-align:left"}
-                    icon = "results-team-icon"
-
-                    match["Date"] = row.find("td").get_text()
-                    place = row.find("font", class_="placement-text").get_text()
-                    match["Placement"] = re.sub("[A-Za-z]", "", place)
-                    match["Tier"] = row.find("a").get_text()
-                    match["Tournament"] = row.find("td", attrs).get_text()
-                    match["Results"] = row.find("td", class_="results-score").get_text()
-                    try:
-                        match["opponent"] = row.find("td", class_=icon).find("a")[
-                            "title"
-                        ]
-                    except TypeError:
-                        try:
-                            match["opponent"] = row.find("td", class_=icon).find(
-                                "abbr"
-                            )["title"]
-                        except:
-                            match["opponent"] = ""
-                    match["Prize"] = row.find_all("td", attrs)[1].get_text()
-
-                    for key, value in match.items():
-                        match[key] = unicodedata.normalize("NFKD", value)
-
-                    match["Placement"] = match["Placement"].replace(" ", "")
-                    match["Results"] = match["Results"].replace(" ", "")
-
-                    achivements.append(match)
+                return self.image_base_url + span.find("a").find("img")["src"]
             except AttributeError:
-                pass
+                return ""
 
-        return achivements
+        def handle_result(data):
+            return unicodedata.normalize("NFKD", data.text.rstrip())
+
+        def handle_opponent(data):
+            try:
+                return data.find("a")["title"].rstrip()
+            except TypeError:
+                return data.text
+
+        return self.read_wikitable(
+            table,
+            self.handle_header_wikitable,
+            self.handle_row_wikitable,
+            [
+                {"place": 1, "func": handle_place},
+                {"place": 2, "func": handle_tier},
+                {
+                    "place": 3,
+                    "func": handle_tournament_icon,
+                    "skip": True,
+                    "key": "tournament_icon",
+                },
+                {
+                    "place": 5,
+                    "func": handle_result,
+                },
+                {
+                    "place": 6,
+                    "skip": True,
+                    "key": "opponent",
+                    "func": handle_opponent,
+                },
+            ],
+        )
+
+    def get_team_matches(self, table):
+        def handle_tier(data):
+            return data.find("a").text
+
+        def handle_tournament_icon(data):
+            spans = data.findChildren("span")
+            span = self.get_span_class(spans, "league-icon-small-image")
+            if len(span) == 0:
+                return ""
+
+            span = span[0]
+            try:
+                return self.image_base_url + span.find("a").find("img")["src"]
+            except AttributeError:
+                return ""
+
+        def handle_result(data):
+            return unicodedata.normalize("NFKD", data.text.rstrip())
+
+        def handle_vod(data):
+            vods = []
+            links = data.find_all("span", {"class": "vodlink"})
+
+            for link in links:
+                vod = {}
+                a = link.find("a")
+                vod["title"] = a["title"].replace("Watch", "")
+                vod["url"] = a["href"]
+                vods.append(vod)
+            return vods
+
+        return self.read_wikitable(
+            table,
+            self.handle_header_wikitable,
+            self.handle_row_wikitable,
+            [
+                {"place": 2, "func": handle_tier},
+                {
+                    "place": 4,
+                    "func": handle_tournament_icon,
+                    "skip": True,
+                    "key": "tournament_icon",
+                },
+                {
+                    "place": 6,
+                    "func": handle_result,
+                },
+                {
+                    "place": 8,
+                    "func": handle_vod,
+                },
+            ],
+        )

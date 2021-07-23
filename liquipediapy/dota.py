@@ -5,6 +5,7 @@ from liquipediapy.dota_modules.player import DotaPlayer
 from liquipediapy.dota_modules.team import DotaTeam
 from liquipediapy.dota_modules.pro_circuit import dota_pro_circuit
 from liquipediapy.dota_modules.common import DotaCommon
+from datetime import datetime
 
 
 class Dota(DotaCommon):
@@ -42,8 +43,11 @@ class Dota(DotaCommon):
             "table",
             {"class": "wikitable"},
         )
+
         return self.read_wikitable(
             table,
+            self.handle_header_wikitable,
+            self.handle_row_wikitable,
             [
                 {"place": 0, "key": "Country", "func": get_player_country},
                 {"place": 3, "func": get_player_team},
@@ -100,8 +104,7 @@ class Dota(DotaCommon):
             teams.append(team_details)
         return teams
 
-    def get_team_info(self, teamName, results=False):
-        # image not working
+    def get_team_info(self, teamName, results=False, matches=False):
         team_object = DotaTeam()
         teamName = team_object.process_teamName(teamName)
         soup, redirect_value = self.liquipedia.parse(teamName)
@@ -111,45 +114,104 @@ class Dota(DotaCommon):
         team["info"] = team_object.get_team_infobox(soup)
         team["links"] = team_object.get_team_links(soup)
         team["cups"] = team_object.get_team_cups(soup)
-        # TO-DO roster,org,former roster,results,matches
-        # team["team_roster"] = team_object.get_team_roster(soup)
-        # if results:
-        #     parse_value = teamName + "/Results"
-        #     try:
-        #         soup, __ = self.liquipedia.parse(parse_value)
-        #     except ex.RequestsException:
-        #         team["results"] = []
-        #     else:
-        #         team["results"] = team_object.get_team_achivements(soup)
+        team["team_roster"] = team_object.get_team_roster(soup)
+        team["organization"] = team_object.get_team_org(soup)
+        team["former_team"] = team_object.get_former_team(soup)
+
+        achievements_table = (
+            soup.find_all("div", {"class": "tabs-dynamic"})[-1]
+            .find("div", {"class": "content1"})
+            .find("table", {"class": "wikitable-striped"})
+        )
+        team["achievements"] = team_object.get_team_achivements(achievements_table)
+
+        results_table = (
+            soup.find_all("div", {"class": "tabs-dynamic"})[-1]
+            .find("div", {"class": "content2"})
+            .find("table", {"class": "wikitable-striped"})
+        )
+        team["matches"] = team_object.get_team_matches(results_table)
+
+        if results:
+            parse_value = teamName + "/Results"
+            try:
+                soup, __ = self.liquipedia.parse(parse_value)
+            except ex.RequestsException:
+                team["results"] = []
+            else:
+                table = soup.find("table", {"class": "wikitable-striped"})
+                team["results"] = team_object.get_team_achivements(table)
+
+        if matches:
+            parse_value = teamName + "/Played_Matches"
+            try:
+                soup, __ = self.liquipedia.parse(parse_value)
+            except ex.RequestsException:
+                team["detailed_matches"] = []
+            else:
+                matches = []
+                tables = soup.find_all("table", {"class": "wikitable-striped"})
+                for table in tables:
+                    matches += team_object.get_team_matches(table)
+                team["detailed_matches"] = matches
 
         return team
 
-    # def get_transfers(self):
-    #     transfers = []
-    #     soup, __ = self.liquipedia.parse("Portal:Transfers")
-    #     indexes = soup.find("div", class_="divHeaderRow")
-    #     index_values = []
-    #     for cell in indexes.find_all("div"):
-    #         index_values.append(cell.get_text())
-    #     rows = soup.find_all("div", class_="divRow")
-    #     for row in rows:
-    #         transfer = {}
-    #         cells = row.find_all("div", class_="divCell")
-    #         for i in range(0, len(cells)):
-    #             key = index_values[i]
-    #             value = cells[i].get_text()
-    #             if key == "Player":
-    #                 value = [val for val in value.split(" ") if len(val) > 0]
-    #             if key == "Previous" or key == "Current":
-    #                 try:
-    #                     value = cells[i].find("a").get("title")
-    #                 except AttributeError:
-    #                     value = "None"
-    #             transfer[key] = value
-    #         transfer = {k: v for k, v in transfer.items() if len(k) > 0}
-    #         transfers.append(transfer)
+    def __get_transfer_page(self, year):
+        now = datetime.now()
+        if year < 2012:
+            year = "Pre_2012"
 
-    #     return transfers
+        assert year <= now.year
+
+        return "Transfers/" + str(year)
+
+    def get_transfers(self, year=None):
+
+        if year is None:
+            page = "Portal:Transfers"
+        else:
+            page = self.__get_transfer_page(year)
+
+        soup, __ = self.liquipedia.parse(page)
+        tables = soup.find_all("div", {"class": "divTable"})
+        data = []
+
+        def handle_players(data):
+            found_players = []
+            player_countries = data.find_all("span", {"class": "flag"})
+            player_names = data.find_all("a", recursive=False)
+            for i in range(0, len(player_names)):
+                player_data = {}
+                player_data["country"] = player_countries[i].find("a").get("title")
+                player_data["name"] = player_names[i].text
+                found_players.append(player_data)
+            return found_players
+
+        def handle_old_new_team(data):
+            team = data.find("a")
+            print(team)
+            if team is not None:
+                return team["title"]
+            else:
+                return data.text
+
+        def handle_ref(data):
+            return data.find("a").get("href")
+
+        for table in tables:
+            data += self.read_div_table(
+                table,
+                self.handle_header_div_table,
+                self.handle_row_div_table,
+                [
+                    {"place": 1, "func": handle_players},
+                    {"place": 2, "func": handle_old_new_team},
+                    {"place": 4, "func": handle_old_new_team},
+                    {"place": 5, "func": handle_ref, "key": "Ref"},
+                ],
+            )
+        return data
 
     # def get_upcoming_and_ongoing_games(self):
     #     games = []

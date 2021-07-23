@@ -10,12 +10,12 @@ dota_obj = Dota("appname")
 
 # teams_disbanded = dota_obj.get_teams(True)
 
-team_details = dota_obj.get_team_info("Team Liquid", False)
-print(team_details)
+# team_details = dota_obj.get_team_info("Team Liquid", False, False)
 
-# transfers = dota_obj.get_transfers()
+# transfers = dota_obj.get_transfers(2018)
 
-# games = dota_obj.get_upcoming_and_ongoing_games()
+games = dota_obj.get_upcoming_and_ongoing_games()
+print(games)
 
 # heros = dota_obj.get_heros()
 # print(heros)
