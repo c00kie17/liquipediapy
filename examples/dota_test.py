@@ -1,4 +1,5 @@
 from liquipediapy import Dota
+import json
 
 dota_obj = Dota("appname")
 
@@ -14,18 +15,16 @@ dota_obj = Dota("appname")
 
 # transfers = dota_obj.get_transfers(2018)
 
-games = dota_obj.get_upcoming_and_ongoing_games()
-print(games)
+# games = dota_obj.get_upcoming_and_ongoing_games()
 
 # heros = dota_obj.get_heros()
-# print(heros)
 
 # items = dota_obj.get_items()
-# print(items)
 
 # patches = dota_obj.get_patches()
-# print(patches)
 
-# tournaments = dota_obj.get_tournaments()
+# tournaments = dota_obj.get_tournaments(3, "2016")
+
+# tournament_info = dota_obj.get_tournament_info("ESL_One/Summer/2021")
 
 # pro_circuit_details = dota_obj.get_pro_circuit_details()

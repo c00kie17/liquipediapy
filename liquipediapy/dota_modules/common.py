@@ -1,4 +1,5 @@
 import unicodedata
+from datetime import datetime
 
 
 class DotaCommon:
@@ -161,3 +162,42 @@ class DotaCommon:
 
     def handle_row_div_table(self, table):
         return table.find_all("div", {"class", "divRow"})
+
+    def read_match_list(self, matches):
+        found_matches = []
+        for match in matches:
+            match_details = {}
+            teams = [
+                match.find("td", {"class": "team-left"}).find("span").find("a"),
+                match.find("td", {"class": "team-right"}).find("span").find("a"),
+            ]
+            for i, team in enumerate(teams):
+                try:
+                    match_details["team" + str(i + 1)] = team["title"]
+                    match_details["team" + str(i + 1) + "_logo"] = (
+                        self.image_base_url + team["href"]
+                    )
+                except TypeError:
+                    match_details["team" + str(i + 1)] = "TBD"
+
+            vs = match.find("td", {"class": "versus"})
+            if "vs" in vs.text:
+                match_details["format"] = vs.text.strip().replace("vs", "").strip("()")
+
+            else:
+                match_details["result"] = vs.text.strip()
+
+            footer = match.find("td", {"class": "match-filler"})
+            match_details["time"] = datetime.strptime(
+                footer.find("span", {"class": "match-countdown"}).text.replace(
+                    "UTC", ""
+                ),
+                "%B %d, %Y - %H:%M ",
+            )
+            tournament = footer.find("span", {"class": "league-icon-small-image"}).find(
+                "a"
+            )
+            match_details["tournament"] = tournament["title"]
+            match_details["tournament_icon"] = self.image_base_url + tournament["href"]
+            found_matches.append(match_details)
+        return found_matches

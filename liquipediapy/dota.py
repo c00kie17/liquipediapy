@@ -3,9 +3,11 @@ from liquipediapy.liquipediapy import liquipediapy
 import re
 from liquipediapy.dota_modules.player import DotaPlayer
 from liquipediapy.dota_modules.team import DotaTeam
-from liquipediapy.dota_modules.pro_circuit import dota_pro_circuit
+from liquipediapy.dota_modules.tournament import DotaTournament
+from liquipediapy.dota_modules.pro_circuit import DotaProCircuit
 from liquipediapy.dota_modules.common import DotaCommon
 from datetime import datetime
+import unicodedata
 
 
 class Dota(DotaCommon):
@@ -213,199 +215,176 @@ class Dota(DotaCommon):
             )
         return data
 
-    # def get_upcoming_and_ongoing_games(self):
-    #     games = []
-    #     soup, __ = self.liquipedia.parse("Liquipedia:Upcoming_and_ongoing_matches")
-    #     matches = soup.find_all("table", class_="infobox_matches_content")
-    #     for match in matches:
-    #         game = {}
-    #         cells = match.find_all("td")
-    #         try:
-    #             game["team1"] = (
-    #                 cells[0]
-    #                 .find("span", class_="team-template-image")
-    #                 .find("a")
-    #                 .get("title")
-    #             )
-    #             game["format"] = cells[1].find("abbr").get_text()
-    #             game["team2"] = (
-    #                 cells[2]
-    #                 .find("span", class_="team-template-image")
-    #                 .find("a")
-    #                 .get("title")
-    #             )
-    #             game["start_time"] = (
-    #                 cells[3].find("span", class_="timer-object").get_text()
-    #             )
-    #             game["tournament"] = cells[3].find("div").a["title"]
-    #             game["tournament_short_name"] = cells[3].find("div").get_text().rstrip()
-    #             try:
-    #                 game["twitch_channel"] = (
-    #                     cells[3]
-    #                     .find("span", class_="timer-object")
-    #                     .get("data-stream-twitch")
-    #                 )
-    #             except AttributeError:
-    #                 pass
-    #             games.append(game)
-    #         except AttributeError:
-    #             continue
+    def get_upcoming_and_ongoing_games(self):
+        games = {}
+        soup, __ = self.liquipedia.parse("Liquipedia:Upcoming_and_ongoing_matches")
+        contents = (
+            soup.find("div", {"class": "matches-list"})
+            .find("div", {"style": ""})
+            .find_all("div", recursive=False)
+        )
+        headers = ["all_upcoming", "featured_matches", "recently_completed"]
+        for i, content in enumerate(contents):
+            header = headers[i]
+            match_list = content.find_all("table", recursive=False)
+            games[header] = self.read_match_list(match_list)
+        return games
 
-    #     return games
+    def get_heros(self):
+        all_heros = []
+        attributes = ["strength", "agility", "intelligence"]
+        soup, __ = self.liquipedia.parse("Portal:Heroes")
+        hero_groups = soup.find_all("ul", {"class": "halfbox"})
+        for i, group in enumerate(hero_groups):
+            heros = group.find_all("li")
+            for hero in heros:
+                hero_data = {}
+                hero_data["name"] = hero.find("a")["title"]
+                hero_data["image"] = self.image_base_url + hero.find("img")["src"]
+                hero_data["attribute"] = attributes[i]
+                all_heros.append(hero_data)
 
-    # def get_heros(self):
-    #     heros = []
-    #     soup, __ = self.liquipedia.parse("Portal:Heroes")
-    #     list_elements = soup.find_all("li")
-    #     for list_element in list_elements:
-    #         hero = {}
-    #         try:
-    #             hero["image"] = self.__image_base_url + list_element.find("img").get(
-    #                 "src"
-    #             )
-    #             hero["name"] = list_element.find("span").get_text()
-    #             heros.append(hero)
-    #         except AttributeError:
-    #             pass
+        return all_heros
 
-    #     return heros
+    def get_items(self):
+        items = []
+        soup, __ = self.liquipedia.parse("Portal:Items")
+        item_divs = soup.find_all("div", class_="responsive")
+        for item_div in item_divs:
+            item = {}
+            item["image"] = self.image_base_url + item_div.find_all("img")[0].get("src")
+            item["name"] = item_div.find_all("a")[1].get_text()
+            try:
+                item["price"] = item_div.find("b").get_text()
+            except AttributeError:
+                pass
+            items.append(item)
 
-    # def get_items(self):
-    #     items = []
-    #     soup, __ = self.liquipedia.parse("Portal:Items")
-    #     item_divs = soup.find_all("div", class_="responsive")
-    #     for item_div in item_divs:
-    #         item = {}
-    #         item["image"] = self.__image_base_url + item_div.find_all("img")[0].get(
-    #             "src"
-    #         )
-    #         item["name"] = item_div.find_all("a")[1].get_text()
-    #         try:
-    #             item["price"] = item_div.find("b").get_text()
-    #         except AttributeError:
-    #             pass
-    #         items.append(item)
+        return items
 
-    #     return items
+    def get_patches(self):
+        patches = []
+        soup, __ = self.liquipedia.parse("Portal:Patches")
+        patch_tables = soup.find_all("table", {"class": "wikitable"})
+        for table in patch_tables:
+            rows = table.find_all("tr")
+            header = rows[0]
+            rows = rows[1:]
 
-    # def get_patches(self):
-    #     patches = []
-    #     soup, __ = self.liquipedia.parse("Portal:Patches")
-    #     tables = soup.find_all("table")
-    #     for table in tables:
-    #         rows = table.find("tbody").find_all("tr")
-    #         indexes = rows[0]
-    #         index_values = []
-    #         for cell in indexes.find_all("td"):
-    #             index_values.append(cell.get_text().rstrip())
-    #         rows = rows[1:]
-    #         for row in rows:
-    #             patch = {}
-    #             cells = row.find_all("td")
-    #             for i in range(0, len(cells)):
-    #                 key = index_values[i]
-    #                 value = cells[i].get_text().rstrip()
-    #                 if key == "Highlights":
-    #                     value = [
-    #                         unicodedata.normalize("NFKD", val)
-    #                         for val in cells[i].get_text().split("\n")
-    #                         if len(val) > 0
-    #                     ]
-    #                 patch[key] = value
-    #             patches.append(patch)
+            header_keys = []
+            header_data = header.find_all("td")
+            for data in header_data:
+                header_keys.append(data.text.strip())
 
-    #     return patches
+            if len(header_keys) == 0:
+                continue
 
-    # def get_tournaments(self, tournamentType=None):
-    #     tournaments = []
-    #     if tournamentType is None:
-    #         page_val = "Portal:Tournaments"
-    #     elif tournamentType == "Show Matches":
-    #         page_val = "Show_Matches"
-    #     else:
-    #         page_val = tournamentType.capitalize() + "_Tournaments"
-    #     soup, __ = self.liquipedia.parse(page_val)
-    #     div_rows = soup.find_all("div", class_="divRow")
-    #     for row in div_rows:
-    #         tournament = {}
+            for row in rows:
+                patch = {}
+                row_data = row.find_all("td")
+                for i, data in enumerate(row_data):
+                    if header_keys[i] == "Highlights":
+                        update_data = []
+                        try:
+                            updates = data.find("ul").find_all("li", recursive=False)
+                        except AttributeError:
+                            continue
+                        for update in updates:
+                            update_data.append(
+                                unicodedata.normalize(
+                                    "NFKD", update.text.strip().replace("\n", "")
+                                )
+                            )
+                        patch[header_keys[i]] = update_data
+                    else:
+                        patch[header_keys[i]] = data.text.strip()
+                patches.append(patch)
+        return patches
 
-    #         values = row.find("div", class_="divCell Tournament Header")
-    #         if tournamentType is None:
-    #             tournament["tier"] = values.a.get_text()
-    #             tournament["name"] = values.b.get_text()
-    #         else:
-    #             tournament["tier"] = tournamentType
+    def get_tournaments(self, tier=None, year_string=""):
+        tournaments = []
+        if tier is None:
+            tier = "Recent_Tournament_Results"
+        else:
+            tier = "Tier_" + str(tier) + "_Tournaments"
 
-    #         try:
-    #             tournament["icon"] = self.__image_base_url + row.find(
-    #                 "div", class_="divCell Tournament Header"
-    #             ).find("img").get("src")
-    #         except AttributeError:
-    #             pass
+        page = tier + "/" + year_string
+        soup, __ = self.liquipedia.parse(page)
 
-    #         try:
-    #             tournament["page"] = self.__image_base_url + values.b.a["href"]
-    #         except AttributeError:
-    #             pass
+        def handle_tournament_icon(data):
+            return self.image_base_url + data.find("img")["src"]
 
-    #         tournament["dates"] = (
-    #             row.find("div", class_="divCell EventDetails Date Header")
-    #             .get_text()
-    #             .strip()
-    #         )
+        def handle_teams(data):
+            return data.find(text=True, recursive=False)
 
-    #         try:
-    #             tournament["prize_pool"] = int(
-    #                 row.find("div", class_="divCell EventDetails Prize Header")
-    #                 .get_text()
-    #                 .rstrip()
-    #                 .replace("$", "")
-    #                 .replace(",", "")
-    #             )
-    #         except (AttributeError, ValueError):
-    #             tournament["prize_pool"] = 0
+        def handle_team_icon(data):
+            span = data.find(
+                "span",
+                {"class": ["team-template-image-icon", "team-template-image-legacy"]},
+            )
+            if span is None:
+                return ""
+            else:
+                return self.image_base_url + span.find("img")["src"]
 
-    #         tournament["teams"] = re.sub(
-    #             "[A-Za-z]",
-    #             "",
-    #             row.find(
-    #                 "div", class_="divCell EventDetails PlayerNumber Header"
-    #             ).get_text(),
-    #         ).rstrip()
-    #         location_list = unicodedata.normalize(
-    #             "NFKD",
-    #             row.find("div", class_="divCell EventDetails Location Header")
-    #             .get_text()
-    #             .strip(),
-    #         ).split(",")
-    #         tournament["host_location"] = location_list[0]
+        def handle_tournament_url(data):
+            a = data.find_all("a")[-1]
+            return self.image_base_url + a["href"]
 
-    #         winner = row.find("div", class_="divCell Placement FirstPlace")
-    #         if winner:
-    #             tournament["winner"] = winner.get_text().strip()
-    #             tournament["runner_up"] = (
-    #                 row.find("div", class_="divCell Placement SecondPlace")
-    #                 .get_text()
-    #                 .strip()
-    #             )
-    #         else:
-    #             tournament["winner"] = "TBD"
-    #             tournament["runner_up"] = "TBD"
+        tables = soup.find_all("div", {"class": "divTable"})
+        for table in tables:
 
-    #         tournaments.append(tournament)
+            data = self.read_div_table(
+                table,
+                self.handle_header_div_table,
+                self.handle_row_div_table,
+                [
+                    {
+                        "place": 0,
+                        "key": "tournament_icon",
+                        "func": handle_tournament_icon,
+                        "add": True,
+                    },
+                    {
+                        "place": 0,
+                        "key": "Tournament",
+                    },
+                    {
+                        "place": 0,
+                        "key": "tournament_url",
+                        "func": handle_tournament_url,
+                        "add": True,
+                    },
+                    {"place": 3, "key": "teams", "func": handle_teams},
+                    {
+                        "place": 5,
+                        "key": "winner_icon",
+                        "func": handle_team_icon,
+                        "add": True,
+                    },
+                    {
+                        "place": 6,
+                        "key": "runner_up_icon",
+                        "func": handle_team_icon,
+                        "add": True,
+                    },
+                ],
+            )
 
-    #     return tournaments
+            tournaments += data
+        return tournaments
 
-    # def get_tournament_baner(self, tournament_page):
-    #     try:
-    #         page, __ = self.liquipedia.parse(
-    #             tournament_page.replace("https://liquipedia.net/dota2/", "")
-    #         )
+    def get_tournament_info(self, tournament_url):
+        tournament = {}
+        tournament_obj = DotaTournament()
+        soup, __ = self.liquipedia.parse(tournament_url)
 
-    #         return f"https://liquipedia.net{page.find('div',class_='infobox-image').div.div.a.img['src']}"
+        tournament["info"] = tournament_obj.get_tournament_infobox(soup)
+        tournament["prizepool"] = tournament_obj.get_prizepool_table(soup)
+        tournament["participants"] = tournament_obj.get_tournament_participants(soup)
+        tournament["matches"] = tournament_obj.get_tournament_bracket_matches(soup)
 
-    #     except AttributeError:
-    #         pass
+        return tournament
 
     # def get_pro_circuit_details(self):
     #     soup, __ = self.liquipedia.parse("Dota_Pro_Circuit/2018-19/Rankings/Full")
