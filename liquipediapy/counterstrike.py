@@ -50,7 +50,7 @@ class counterstrike():
 			rows = table.find_all('tr')
 			header = rows[0]
 			team['name'] = header.find('span',class_='team-template-text').get_text()
-			team['logo'] = self.__image_base_url+header.find('span',class_='team-template-image').find('img').get('src')
+			team['logo'] = self.__image_base_url+header.find('span',class_='team-template-team-standard').find('img').get('src')
 			team['playes'] = []
 			rows = rows[2:]
 			for row in rows:		
