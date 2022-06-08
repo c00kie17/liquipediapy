@@ -28,7 +28,7 @@ class counterstrike():
 				player['name'] = name_list[1].replace(' ','')
 				player['country'] = row.find('a').get('title')
 				try:
-					team = row.find('span',class_='team-template-image').find('a').get('title')
+					team = row.find('span',class_='team-template-image-icon').find('a').get('title')
 				except AttributeError:
 					team = ''
 				player['team'] = team
