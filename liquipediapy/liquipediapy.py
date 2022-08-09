@@ -7,7 +7,7 @@ from urllib.request import quote
 from liquipediapy.devparser import DevParser
 
 class liquipediapy():
-	def __init__(self, appname: str, game: str, debug_cfg: str= ""):
+	def __init__(self, appname: str, game: str, debug_folder: str= ""):
 		self.appname = appname
 		self.game = game
 		self.__headers = {'User-Agent': appname, 'Accept-Encoding': 'gzip'}
@@ -18,8 +18,8 @@ class liquipediapy():
 		# and reading from it afterwards to avoid surcharing liquipedia api
 		# If read mode and file requested not in folder, query will happen
 		self.__debug = False
-		if debug_cfg != "":
-			self.devparser = DevParser(debug_cfg) 
+		if debug_folder != "":
+			self.devparser = DevParser(debug_folder) 
 			self.__debug = True
 
 	def parse(self,page):

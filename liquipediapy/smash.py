@@ -7,9 +7,9 @@ from urllib.request import quote
 
 
 class smash():
-	def __init__(self, appname: str, debug_cfg: str = ""):
+	def __init__(self, appname: str, debug_folder: str = ""):
 		self.appname = appname
-		self.liquipedia = liquipediapy(appname, 'smash', debug_cfg)
+		self.liquipedia = liquipediapy(appname, 'smash', debug_folder)
 		self.__image_base_url = 'https://liquipedia.net'
 
 	def get_players(self) -> list:

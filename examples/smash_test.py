@@ -1,9 +1,10 @@
 from liquipediapy import smash
 
-# smash_wiki = smash('appname', "F:\\Path\\To\\debug.ini")
-smash_wiki = smash('appname')
-players = smash_wiki.get_players()
+# smash_wiki = smash('appname', "F:\\Path\\To\\Folder\\")
+# smash_wiki = smash('appname')
+smash_wiki = smash('appname', debug_folder="F:\\Projets\\SBTV\\HTMLOutput\\")
+# players = smash_wiki.get_players()
 
 teams = smash_wiki.get_teams()
 
-MKLeo_details = smash_wiki.get_player_info('MKLeo', True)
+Armada_details = smash_wiki.get_player_info('Armada', True)

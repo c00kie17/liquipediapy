@@ -128,8 +128,6 @@ class smash_player():
 
 		if len(tables) == 0:
 			return achivements
-		assert len(games) == len(tables), \
-			"We should always have the same number of games and tables"
 
 		# Move along each game
 		for j, (game, table) in enumerate(zip(games, tables)):
@@ -222,7 +220,7 @@ class smash_player():
 						elif i == 6:
 							try:
 								value = cells[i].get_text()
-								prize = {'amount': float(data[1:]), 'currency': data[0]}
+								prize = {'amount': float(value[1:]), 'currency': value[0]}
 							except ValueError:
 								value = cells[i].get_text()
 								prize = {'amount': value, 'currency': value}
