@@ -7,12 +7,17 @@ import unicodedata
 class DevParser():
 	"""Object used to write query to file and re-read data from it,
 	Avoiding liquidpedia overload.
-	DevParser takes in the path of folder 
+	DevParser takes in the path of folder
 	where we'll store html pages
 	"""
 
 	def __init__(self, config_folder: str):
 		self.__folder_path = config_folder
+		self._k = len(self.__folder_path)
+		print("********" + "*" * self._k)
+		print('*       RUNNING DEBUG MODE')
+		print(f"*       {self.__folder_path}")
+		print("********" + "*" * self._k)
 
 	def isPageAvailableLocally(self, page: str) -> bool:
 		page = self.format_page(page)
@@ -31,7 +36,7 @@ class DevParser():
 		return data
 
 	def fromFile(self, page: str) -> tuple:
-		print(f"fromFile")
+		print(f"*       READING FROM FILE")
 		try:
 			page = self.format_page(page)
 			page_path = f"{self.__folder_path}{page}.html"
@@ -40,14 +45,20 @@ class DevParser():
 				content = f.read()
 				content = self.format_data(content)
 				soup = BeautifulSoup(content, features="lxml")
+			print(f"*       done")
+			print("********" + "*" * self._k)
 			return True, soup
 		except FileNotFoundError:
+			print(f"*       FileNotFoundError")
+			print("********" + "*" * self._k)
 			return False, None
 
 	def toFile(self, soup: BeautifulSoup, page: str):
-		print(f"toFile")
+		print(f"*       WRITING TO FILE")
 		# Only for smash player pages, we'll have to handle that better on
 		page = self.format_page(page)
 		page_path = f"{self.__folder_path}{page}.html"
 		with open(page_path, 'w', encoding="utf-8") as f:
 			f.write(str(soup))
+		print(f"*       done")
+		print("********" + "*" * self._k)

@@ -2,6 +2,7 @@ import liquipediapy.exceptions as ex
 from liquipediapy.liquipediapy import liquipediapy
 import re
 from liquipediapy.smash_modules.player import smash_player
+from liquipediapy.smash_modules.team import smash_team
 import unicodedata
 from urllib.request import quote
 
@@ -102,3 +103,25 @@ class smash():
 		for team in templates:
 			teams.append(team.a['title'])
 		return teams
+
+	def get_team_info(self, teamName, results=True):
+		team_object = smash_team()
+		teamName = team_object.process_teamName(teamName)
+		soup, redirect_value = self.liquipedia.parse(teamName)
+		if redirect_value is not None:
+			teamName = redirect_value
+		team = {}
+		team['info'] = team_object.get_team_infobox(soup)
+		team['links'] = team_object.get_team_links(soup)
+		team['team_roster'] = team_object.get_team_roster(soup)
+		team['org_roster'] = team_object.get_team_org(soup)
+		# team['achivements'] = team_object.get_team_achivements(soup)
+		# if results:
+		# 	parse_value = teamName + "/Results"
+		# 	try:
+		# 		soup,__ = self.liquipedia.parse(parse_value)
+		# 	except ex.RequestsException:
+		# 		team['results'] = []
+		# 	else:
+		# 		team['results'] = team_object.get_team_achivements(soup)
+		return team
