@@ -115,13 +115,4 @@ class smash():
 		team['links'] = team_object.get_team_links(soup)
 		team['team_roster'] = team_object.get_team_roster(soup)
 		team['org_roster'] = team_object.get_team_org(soup)
-		# team['achivements'] = team_object.get_team_achivements(soup)
-		# if results:
-		# 	parse_value = teamName + "/Results"
-		# 	try:
-		# 		soup,__ = self.liquipedia.parse(parse_value)
-		# 	except ex.RequestsException:
-		# 		team['results'] = []
-		# 	else:
-		# 		team['results'] = team_object.get_team_achivements(soup)
 		return team
