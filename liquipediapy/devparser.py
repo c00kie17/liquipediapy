@@ -36,17 +36,17 @@ class DevParser():
 		return data
 
 	def fromFile(self, page: str) -> tuple:
-		print(f"*       READING FROM FILE")
 		try:
 			page = self.format_page(page)
 			page_path = f"{self.__folder_path}{page}.html"
 			soup = None
 			with open(page_path, 'r', encoding="utf-8") as f:
+				print(f"*       READING FROM {page_path}")
 				content = f.read()
 				content = self.format_data(content)
 				soup = BeautifulSoup(content, features="lxml")
-			print(f"*       done")
-			print("********" + "*" * self._k)
+				print(f"*       done")
+				print("********" + "*" * self._k)
 			return True, soup
 		except FileNotFoundError:
 			print(f"*       FileNotFoundError")
@@ -54,11 +54,11 @@ class DevParser():
 			return False, None
 
 	def toFile(self, soup: BeautifulSoup, page: str):
-		print(f"*       WRITING TO FILE")
 		# Only for smash player pages, we'll have to handle that better on
 		page = self.format_page(page)
 		page_path = f"{self.__folder_path}{page}.html"
 		with open(page_path, 'w', encoding="utf-8") as f:
+			print(f"*       WRITING TO {page_path}")
 			f.write(str(soup))
-		print(f"*       done")
-		print("********" + "*" * self._k)
+			print(f"*       done")
+			print("********" + "*" * self._k)

@@ -78,7 +78,7 @@ class smash_player():
 			return player_links
 		for link in links:
 			link_list = link.get('href').split('.')
-			site_name = link_list[-2].replace('https://', '').replace('http://', '')
+			site_name = link_list[0].replace('https://', '').replace('http://', '')
 			player_links[site_name] = link.get('href')
 
 		return player_links
@@ -147,7 +147,7 @@ class smash_player():
 					index_values.append(cell.get_text().rstrip())
 				index_values.insert(0, 'Game')
 
-			# We will handle results as is :
+			# We will handle results like this :
 			# {
 			#   'game': str,
 			#   'date': str,
@@ -211,7 +211,6 @@ class smash_player():
 						elif i == 5:
 							spans = cells[i].find_all('span', class_='heads-padding-right')
 							opp_characters = [c.find('img').get('title') for c in spans]
-							achivement['Result'] = {}
 							achivement['Result']['Opp_characters'] = opp_characters
 
 							opponent = cells[i].find('a').get_text().rstrip()
@@ -220,7 +219,7 @@ class smash_player():
 						elif i == 6:
 							try:
 								value = cells[i].get_text()
-								prize = {'amount': float(value[1:]), 'currency': value[0]}
+								prize = {'amount': float(value[1:].replace(',','.')), 'currency': value[0]}
 							except ValueError:
 								value = cells[i].get_text()
 								prize = {'amount': value, 'currency': value}

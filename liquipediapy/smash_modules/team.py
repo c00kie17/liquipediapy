@@ -56,7 +56,7 @@ class smash_team():
 			return team_links
 		for link in links:
 			link_list = link.get('href').split('.')
-			site_name = link_list[-2].replace('https://', '').replace('http://', '')
+			site_name = link_list[0].replace('https://', '').replace('http://', '')
 			team_links[site_name] = link.get('href')
 
 		return team_links
