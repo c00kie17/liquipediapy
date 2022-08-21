@@ -116,3 +116,80 @@ class smash():
 		team['team_roster'] = team_object.get_team_roster(soup)
 		team['org_roster'] = team_object.get_team_org(soup)
 		return team
+
+	def get_transfers(self):
+		transfers = []
+		soup, __ = self.liquipedia.parse('Player_Transfers')
+		# Main transfer page doesn't work as expected
+		# Iterate over all year to get all transfers
+
+		# First line is "Latest", Second is "2013", empty
+		years = soup.find('div', class_='tabs-static').find_all('li')[2:]
+
+		for year in years:
+			year = year.get_text()
+			url = f"Player_Transfers/{year}"
+			print(url)
+			soup, _ = self.liquipedia.parse(url)
+
+			indexes = soup.find('div', class_='divHeaderRow')
+			index_values = []
+			for cell in indexes.find_all('div'):
+				text = cell.get_text().strip()
+				if text != '':
+					index_values.append(text)
+			index_values.insert(3, 'Icon')
+			index_values.append('Link')
+			rows = soup.find_all('div', class_='divRow')
+			for row in rows:
+				transfer = {}
+				cells = row.find_all('div', class_='divCell')
+				for i in range(0, len(cells)):
+					key = index_values[i]
+					value = cells[i].get_text().strip()
+					if key == "Player":
+						# Player can have up to three direct child
+						# Country, Main, Name
+						children = [
+							c for c in cells[i].findChildren(recursive=False) if c.name != 'br'
+						]
+
+						players = []
+						player = {}
+						for child in children:
+							if child.name == 'span':
+								if 'Country' in player.keys():
+									players.append(player)
+									player = {}
+								player['Country'] = child.find('a').get('title').strip()
+							elif child.name == 'img':
+								if 'Main' in player.keys():
+									players.append(player)
+									player = {}
+								player['Main'] = child.get('title').strip()
+							elif child.name == 'a':
+								if 'Name' in player.keys():
+									players.append(player)
+									player = {}
+								player['Name'] = child.get_text().strip()
+						players.append(player)
+						value = players
+					if key == "Old" or key == "New":
+						try:
+							value = cells[i].find('a').get('title')
+						except AttributeError:
+							value = "None"
+
+					if key == 'Icon':
+						continue
+					if key == 'Link':
+						try:
+							value = cells[i].find('a').get('href')
+						except AttributeError:
+							value = "None"
+
+					transfer[key] = value
+				transfer = {k: v for k, v in transfer.items() if len(k) > 0}
+				transfers.append(transfer)
+
+		return transfers

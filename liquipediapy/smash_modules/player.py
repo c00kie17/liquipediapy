@@ -219,7 +219,10 @@ class smash_player():
 						elif i == 6:
 							try:
 								value = cells[i].get_text()
-								prize = {'amount': float(value[1:].replace(',','.')), 'currency': value[0]}
+								prize = {
+									'amount': float(value[1:].replace(',', '.')),
+									'currency': value[0]
+								}
 							except ValueError:
 								value = cells[i].get_text()
 								prize = {'amount': value, 'currency': value}
