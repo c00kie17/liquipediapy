@@ -104,7 +104,7 @@ class smash():
 			teams.append(team.a['title'])
 		return teams
 
-	def get_team_info(self, teamName: str, results: bool = True) -> dict:
+	def get_team_info(self, teamName: str) -> dict:
 		team_object = smash_team()
 		teamName = team_object.process_teamName(teamName)
 		soup, redirect_value = self.liquipedia.parse(teamName)
