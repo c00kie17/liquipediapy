@@ -52,6 +52,13 @@ The [examples](https://github.com/c00kie17/liquipediapy/tree/master/examples) di
   - [get_weapon_info](#counterstrike_get_weapon_info) 
   - [get_statistics](#counterstrike_get_statistics) 
   - [get_patches](#counterstrike_get_patches) 
+- [smash](#smash) 
+  - [get_players](#smash_get_players) 
+  - [get_player_info](#smash_get_player_info) 
+  - [get_teams](#smash_get_teams) 
+  - [get_team_info](#smash_get_team_info)
+  - [get_transfers](#smash_get_transfers) 
+  - [get_tournaments](#smash_get_tournaments)
   
 <a name="liquipediapy_obj"></a>  
 #### liquipediapy(appname,game)
@@ -62,12 +69,15 @@ create a liquipediapy object
 | --- | --- | --- |
 | appname | <code>string</code> | The name for your app, you can refer to the [liquipedia's terms of use](https://liquipedia.net/api-terms-of-use) for more information |
 | game | <code>string</code> | name of the game you want to create the object for |
+| debug_folder | <code>string</code> | (Optionnal) Path of the debug folder where you want to store html pages (and read back from it)|
 
 ##### example
 ```python
 from liquipediapy import liquipediapy
 
 liquipy_object = liquipediapy('appname')
+liquipy_object = liquipediapy('appname', 'dota2')
+liquipy_object = liquipediapy('appname', 'smash', "F:\\Path\\To\\Debug\\Folder\\")
 ```
 ***
 <a name="liquipediapy_parse"></a>  
@@ -220,8 +230,9 @@ gets information for a specified team
 
 
 ##### response
-````python
+```python
 {'info': {'image': 'https://liquipedia.net/commons/images/thumb/7/7e/Team_Liquid_2020.png/600px-Team_Liquid_2020.png', 'location': ['Netherlands', 'Europe'], 'region': 'Europe', 'coach': 'Blitz', 'director': 'Steve Arhancet Nazgul', 'manager': 'Elya', 'team captain': 'iNSaNiA', 'sponsor': ['Marvel', 'Monster Energy', 'Alienware', 'SAP', 'Honda', 'HyperX', 'Secretlab', 'Twitch', "Jersey Mike's", 'Huya 虎牙直播'], 'earnings': 22991558, 'created': '2000-??-?? 2012-12-06'}, 'links': {'teamliquid': 'https://www.teamliquid.com/', 'liquiddota': 'https://www.liquiddota.com/forum/players-and-teams/495594-team-liquid-discussion', 'facebook': 'https://facebook.com/teamliquid', 'vk': 'https://vk.com/teamliquidpro', 'twitch': 'https://www.twitch.tv/team/teamliquid', 'twitter': 'https://twitter.com/teamliquid', 'weibo': 'https://weibo.com/teamliquid', 'youtube': 'https://www.youtube.com/Team_Liquid', 'instagram': 'https://www.instagram.com/teamliquid', 'dotabuff': 'https://www.dotabuff.com/esports/teams/2163', 'datdota': 'https://www.datdota.com/teams/2163'}, 'cups': ['RaidCall Dota 2 League Season 2', 'EPICENTER 2016', 'StarLadder i-League StarSeries Season 3', 'StarLadder i-League Invitational Season 2', 'EPICENTER 2017', 'The International 2017', 'China Dota2 Supermajor', 'ESL One Germany 2020'], 'team_roster': [{'ID': 'miCKe', 'Name': 'Michael Vu', 'Position': '1', 'Join Date': '2019-10-02'}, {'ID': 'qojqva', 'Name': 'Maximilian Bröcker', 'Position': '2', 'Join Date': '2019-10-02'}, {'ID': 'Boxi', 'Name': 'Samuel Svahn', 'Position': '3', 'Join Date': '2019-10-02'}, {'ID': 'Taiga', 'Name': 'Tommy Le', 'Position': '4', 'Join Date': '2019-10-02'}, {'ID': 'iNSaNiA', 'Name': 'Aydin Sarkohi', 'Position': '5', 'Join Date': '2019-10-02'}]} ````
+```
 ##### example
 ```python
 team_details = dota_obj.get_team_info('Team Liquid',True)
@@ -570,6 +581,146 @@ gets all patches from [Patches](https://liquipedia.net/counterstrike/Patches)
 ##### example
 ```python
 patches = counterstrike_obj.get_patches()
+```
+***
+
+<a name="smash"></a>  
+#### smash(appname)
+create a smash object
+
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| appname | <code>string</code> | The name for your app, you can refer to the [liquipedia's terms of use](https://liquipedia.net/api-terms-of-use) for more information |
+
+##### example
+```python
+from liquipediapy import counterstrike
+
+smash_obj = smash("appname")
+smash_obj = smash('appname', "F:\\Path\\To\\Debug\\Folder\\")
+```
+***
+
+
+<a name="smash_get_players"></a>  
+#### get_players()
+returns all smash players from all regions from 
+- [Players_(Americas)/64](https://liquipedia.net/smash/Players_(Americas)/64) 
+- [Players_(Americas)/Melee](https://liquipedia.net/smash/Players_(Americas)/Melee) 
+- [Players_(Americas)/Project_M](https://liquipedia.net/smash/Players_(Americas)/Project_M) 
+- [Players_(Americas)/Brawl_WiiU_Ultimate](https://liquipedia.net/smash/Players_(Americas)/Brawl_WiiU_Ultimate) 
+- [Players_(Europe)/64](https://liquipedia.net/smash/Players_(Europe)/64) 
+- [Players_(Europe)/Melee](https://liquipedia.net/smash/Players_(Europe)/Melee) 
+- [Players_(Europe)/Project_M](https://liquipedia.net/smash/Players_(Europe)/Project_M) 
+- [Players_(Europe)/Brawl_WiiU_Ultimate](https://liquipedia.net/smash/Players_(Europe)/Brawl_WiiU_Ultimate) 
+- [Players_(Asia/Oceania)](https://liquipedia.net/smash/Players_(Asia/Oceania)) 
+  _Asia/Oceania page use dynamic tab instead of static tabs_
+
+##### response
+````python
+[{'Country': 'Canada', 'ID': 'Fck Vwls', 'Real Name': 'Neil Mahadeo', 'Main': ['Captain Falcon'], 'Team': '', 'Links': {}, 'Game': '64'}, {'Country': 'Canada', 'ID': 'HandsomeTom', 'Real Name': 'Etienne Gagnon', 'Main': ['Kirby'], 'Team': '', 'Links': {'twitter': 'https://twitter.com/HandsomeTomSSB'}, 'Game': '64'},...,{'Country': 'Australia', 'ID': 'Waveguider', 'Real Name': 'Alex Grant', 'Main': ['Greninja', 'Wii Fit Trainer'], 'Team': '', 'Links': {'twitch': 'https://www.twitch.tv/waveguider', 'twitter': 'https://twitter.com/WaveguiderAU'}, 'Game': 'Brawl WiiU Ultimate'}]
+````
+##### example
+```python
+players = smash_obj.get_players()
+```
+***
+
+
+<a name="smash_get_player_info"></a>  
+#### get_player_info(playerName,results)
+gets information for a specified player
+
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| playerName | <code>string</code> | name of player |
+| results | <code>bool</code> | if you want to parse the results page for the player, defauls to ```False``` |
+
+
+##### response
+````python
+{'info': {'image': 'https://liquipedia.net/commons/images/thumb/5/5b/Armada_TBH8.jpg/600px-Armada_TBH8.jpg', 'name': 'Adam Lindgren', 'born': ' (1993-03-28) March 28, 1993 (age 29)', 'countries': ['Sweden'], 'years_active': '2007 - 2019', 'team': 'Alliance', 'earnings': 298358, 'nicknames': 'The Swedish Sniper, The Beast from Sweden, The One True God', 'current_mains': ' Inkling', 'secondaries': ' Corrin Mewtwo'}, 'links': {'www': 'https://www.reddit.com/user/Armada_', 'twitter': 'https://twitter.com/ArmadaUGS', 'facebook': 'https://facebook.com/armadassbm'},..., {'Game': 'Melee', 'Date': '2007-04-03', 'Place': ('D1', '4th'), 'Event': "Smashers' Reunion 2", 'Result': {'Characters': [], 'Scores': ['L'], 'Opp_characters': [], 'Opponent': 'Helios'}, 'Prize': {'amount': 49.0, 'currency': '$'}}]}
+````
+##### example
+```python
+player_details = smash_obj.get_player_info('Armada',True)
+```
+***
+
+<a name="smash_get_teams"></a>  
+#### get_teams()
+returns all smash teams
+
+##### response
+````python
+['16-Bit Esports', '26 RISING', 'AllChat Esports', 'Alliance', 'Balance Gaming', 'Bandits Gaming', 'beastcoast', 'Bermuda', 'Black Sun E-Sports', 'BMS ESPORTS', 'BOX', 'Cologne Gaming Network', 'Chilly Mountain', 'CJ eSports', 'Clash Tournaments', 'Cloud9', 'Coalition Gaming', 'Conduit Gaming', 'Counter Logic Gaming', 'Crazy Raccoon', 'Dignitas', 'Divinity Esports', 'EndGameTV', 'Esport BERG', 'Even Matchup Gaming', 'Evil Geniuses', 'FaZe Clan', 'Fly Society', 'FlyQuest', 'FURIA Esports', 'Geeky Goon Squad', 'Golden Guardians', 'Granit Gaming', 'Ground Zero Gaming', 'Hexagon', 'Hound Esports', 'IlluZion Gaming', 'InControl Nation', 'Kanga Esports', 'Karnage eSports', 'Lavender esports', 'Level1', 'LOSC eSports', 'Luminosity Gaming', 'Mazer Gaming', 'Melee It On Me', 'Mindfreak', 'Moist Esports', 'Most Valuable Gaming', 'mYinsanity', 'Nevermore International', 'NidhoGG esport', 'orKs Grand Poitiers', 'Panda', 'Patchwork', 'Phenoms Pro', 'Phoenix Blue', 'Pittsburgh Knights', 'plan-B esports', 'Polar Ace', 'Pulse', 'Rectify Esports', 'Red Bull eSports', 'RELAPSE', 'Renegades', 'Revo', 'RoyalBlue eSports', 'Salty Arena', 'Shogunate Gaming', 'Sissi State Punks', 'SmartFox Gaming', 'Smash Studios', 'Solary', 'Spacestation Gaming', 'SSBMontreal', 'T1', 'Taipan Esports', 'The Dutch Brawlers', 'Team Envy', 'Heir', 'Team Liquid', 'Team Oplon', 'TSM', 'Team Vegacy', 'Tempo Storm', 'Thunder Gaming', 'UYU', 'VGBootCamp', 'Warthox', 'Wolves eSports', '24 Islands', '2GGaming', 'Amino', 'AntiBeat', 'Armada', 'Asterion', 'Beefy Smash Doods', 'Boreal eSports', 'COGnitive Gaming', 'Control Gaming', 'Dark Sided', 'Demise', 'Denial eSports', 'Dream Team', 'eSports Ecosystem', 'Earthroot Gaming', 'Echo Fox', 'eLevate', 'Empire Arcadia', 'FolloweSports.com', 'Forward Smash', 'Frequency Gaming', 'G2 Esports', 'Glacial Gaming', 'Halocline Gaming', 'Immortals', 'justice esports', 'Kingsmen', 'Kyoto eSports', 'LeStream Esport', 'LowLandLions', 'Meliora Esports', 'Mentality Esports', 'Misfits', 'Mortality', 'NRG Esports', 'OG', 'Obey Alliance', 'Phoenix1', 'Poilon Software', 'Prometheus', 'ROOT Gaming', 'Rogue', 'Selfless Gaming', 'ShieldBreakFast', 'Sinai Village', 'Sloth', 'Splyce', 'TKA E-Sports', 'Curse', 'Team Secret', 'Team YP', 'TeamViral', 'Tuxedo Esports', 'Versus Gaming Center', 'VwS Gaming', 'Winterfox', 'World Best Gaming', 'Yatta Gaming', 'eUnited']
+````
+##### example
+```python
+teams = smash_obj.get_teams()
+```
+***
+
+
+<a name="smash_get_team_info"></a>  
+#### get_team_info(teamName)
+gets information for a specified team
+
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| teamName | <code>string</code> | name of the team |
+
+##### response
+```python
+{'info': {'image': 'https://liquipedia.net/commons/images/thumb/4/4e/T1_allmode.png/600px-T1_allmode.png', 'location': ['South Korea', 'United States'], 'region': ' North America', 'created': '2019-03-13'}, 'links': {'t1': 'https://t1.gg', 'facebook': 'https://facebook.com/SKsports.T1', 'twitter': 'https://twitter.com/T1', 'www': 'https://www.youtube.com/channel/UCJprx3bX49vNl6Bcw01Cwfg'}, 'team_roster': [{'Country': 'South Korea', 'ID': 'Sejun', 'Name': 'Sejun Park', 'Main': ['King Dedede'], 'Join Date': '2019-11-14'}, {'Country': 'Mexico', 'ID': 'MKLeo', 'Name': 'Leonardo Lopez Perez', 'Main': ['Pyra and Mythra', 'Byleth'], 'Join Date': '2020-02-26'}, {'Country': 'United States', 'ID': 'ANTi', 'Name': 'Jason Bates', 'Main': ['Mario', 'Snake'], 'Join Date': '2019-04-17', 'Leave Date': '2020-07-02'}, {'Country': 'United States', 'ID': 'Larry Lurr', 'Name': 'Larry Holland', 'Main': ['Wolf', 'Falco'], 'Join Date': '2019-04-17', 'Leave Date': '2020-01-10'}], 'org_roster': []}
+```
+##### example
+```python
+team_details = smash_obj.get_team_info('T1')
+```
+***
+
+<a name="smash_get_transfers"></a>  
+#### get_transfers()
+gets all transfers from [Player_Transfers](https://liquipedia.net/smash/Player_Transfers)
+from **Portal_Transfers/2014** to **Portal_Transfers/2022**
+
+
+##### response
+```python
+[{'Date': '2014-11-09', 'Player': [{'Country': 'Japan', 'Main': 'Sheik', 'Name': 'Nietono'}], 'Old': 'None', 'New': 'DetonatioN Gaming', 'Link': 'http://team-detonation.net/news/3709'},...,{'Date': '2022-01-01', 'Player': [{'Country': 'Japan', 'Main': 'Corrin', 'Name': 'Ly'}, {'Country': 'Japan', 'Main': 'Link', 'Name': 'Rido'}, {'Country': 'Japan', 'Main': 'Falco', 'Name': 'MASA'}], 'Old': 'None', 'New': 'UNI Gaming', 'Link': 'https://twitter.com/uni_gaming_info/status/1477071164174389251'}]
+```
+##### example
+```python
+transfers = smash_obj.get_transfers()
+```
+***
+
+<a name="smash_get_tournaments"></a>  
+#### get_tournaments(games, extended_infos)
+gets all tournaments from [Portal:Tournaments](https://liquipedia.net/smash/Portal:Tournaments)
+
+##### parameters
+| Param | Type | Description |
+| --- | --- | --- |
+| games | <code>list[string]</code> | games we want to retrieve, defaults is ```['64']```, accepted values are ```64```, ```Melee```, ```Brawl```, ```Project_M```, ```Wii_U```, ```Ultimate```|
+| extended_infos | <code>bool</code> | get type of tournaments (Major, Invitationnal, Double, ...), Winner & RunnerUp characters (for Majors only)
+
+##### response
+```python
+[{'Game': '64', 'Tournament': 'Apex 2022', 'Date': 'Nov 18 - 20, 2022', 'Prize': {'amount': ' ', 'currency': ' '}, 'Players': '', 'Location': {'Country': 'United States', 'City': 'Secaucus'}, 'Winner': {'Country': '', 'Name': ''}, 'Runner-up': {'Country': '', 'Name': ''}},..., {'Game': '64', 'Tournament': '1st Kansai', 'Date': 'Mar 14, 2008', 'Prize': {'amount': ' ', 'currency': ' '}, 'Players': '46', 'Location': {'Country': 'Japan', 'City': 'Osaka'}, 'Winner': {'Country': 'Japan', 'Name': 'Ron'}, 'Runner-up': {'Country': 'Japan', 'Name': 'Tsukuru BOY'}}]
+```
+```python
+[{'Game': '64', 'Tournament': 'Apex 2022', 'Date': 'Nov 18 - 20, 2022', 'Prize': {'amount': ' ', 'currency': ' '}, 'Players': '', 'Location': {'Country': 'United States', 'City': 'Secaucus'}, 'Winner': {'Country': '', 'Name': ''}, 'Runner-up': {'Country': '', 'Name': ''}},..., {'Game': '64', 'Tournament': '1st Kansai', 'Date': 'Mar 14, 2008', 'Prize': {'amount': ' ', 'currency': ' '}, 'Players': '46', 'Location': {'Country': 'Japan', 'City': 'Osaka'}, 'Winner': {'Country': 'Japan', 'Name': 'Ron', 'Characters': ['Jigglypuff']}, 'Runner-up': {'Country': 'Japan', 'Name': 'Tsukuru BOY', 'Characters': ['Captain Falcon']}, 'Type': 'Major'}]
+```
+##### example
+```python
+tournaments = smash_obj.get_tournaments()
+tournaments = smash_obj.get_tournaments(extended_infos=True)
+tournaments = smash_obj.get_tournaments(games=['64', 'Melee', 'Brawl', 'Project_M', 'Wii_U', 'Ultimate'], extended_infos=True)
 ```
 ***
 
