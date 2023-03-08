@@ -58,7 +58,7 @@ class cs_player():
 				player['roles'] = player_roles
 			elif attribute == "Games":
 				games = []
-				game_values = info_boxes[i+1].find_all('i')	
+				game_values = info_boxes[i].find_all('i')	
 				for game in game_values:
 					games.append(game.get_text())
 				player['games'] = games	
