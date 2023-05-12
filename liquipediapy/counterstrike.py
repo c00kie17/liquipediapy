@@ -135,6 +135,11 @@ class counterstrike():
 						value = cells[i].find('a').get('title')	
 					except	AttributeError:
 						value = "None"
+				if key == "Ref":
+					try:
+						value = cells[i].find('a').get('href')	
+					except	AttributeError:
+						value = "None"
 				transfer[key] = value
 			transfer = {k: v for k, v in transfer.items() if len(k) > 0}	
 			transfers.append(transfer)	
