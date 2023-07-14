@@ -1,5 +1,7 @@
 # liquipediapy
-> api for liquipedia.net 
+> api for liquipedia.net
+
+This is an un-official liquipedia API and is will not be updated anymore
 
 ## Contents
 - [Installation](#install)
