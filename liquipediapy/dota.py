@@ -119,9 +119,14 @@ class dota():
 				value = cells[i].get_text()
 				if key == "Player":
 					value = [val for val in value.split(' ') if len(val) > 0]
-				if key == "Previous" or key == "Current":
+				if key == "Old" or key == "New":
 					try:
 						value = cells[i].find('a').get('title')	
+					except	AttributeError:
+						value = "None"
+				if key == "Ref":
+					try:
+						value = cells[i].find('a').get('href')	
 					except	AttributeError:
 						value = "None"
 				transfer[key] = value
