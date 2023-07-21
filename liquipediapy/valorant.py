@@ -6,6 +6,7 @@ from liquipediapy.valorant_modules.player import valorant_player
 from liquipediapy.valorant_modules.team import valorant_team
 import itertools
 from urllib.request import quote
+import pycountry
 
 
 class valorant():
@@ -25,13 +26,36 @@ class valorant():
       index_values.append(cell.get_text().strip())
     rows = soup.find_all('div', class_='divRow')
     for row in rows:
+      player = {}
       transfer = {}
       cells = row.find_all('div', class_='divCell')
       for i in range(0, len(cells)):
         key = index_values[i]
-        value = cells[i].get_text()
+        value = cells[i].get_text().strip()
         if key == "Player":
-          value = [val for val in value.split(' ') if len(val) > 0]
+          children = [
+            c for c in cells[i].findChildren(recursive=False) if c.name != 'br'
+          ]
+          players = []
+          player = {}
+          for child in children:
+            if child.name == 'span':
+              if 'Country' in player.keys():
+                players.append(player)
+                player = {}
+              country = child.find('a').get('title').strip()
+              try:
+                player['Country'] = pycountry.countries.search_fuzzy(
+                  country)[0].flag
+              except LookupError:
+                country = ""
+            elif child.name == 'a':
+              if 'Name' in player.keys():
+                players.append(player)
+                player = {}
+              player['Name'] = child.get_text().strip()
+          players.append(player)
+          value = players
         if key == "Old" or key == "New":
           try:
             value = cells[i].find('a').get('title')
@@ -39,9 +63,12 @@ class valorant():
             value = "None"
         if key == "Ref":
           try:
-            value = cells[i].find('a').get('href')
+            value = cells[i].find('a').get('href').lower()
+            if "?s=20" in value:
+              value.replace('?s=20', '')
           except AttributeError:
             value = "None"
+
         transfer[key] = value
       transfer = {k: v for k, v in transfer.items() if len(k) > 0}
       transfers.append(transfer)
@@ -114,7 +141,6 @@ class valorant():
 
     return weapon
 
- 
   def get_patches(self):
     patches = []
     soup, __ = self.liquipedia.parse('Patches')
