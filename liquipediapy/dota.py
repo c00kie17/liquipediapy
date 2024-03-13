@@ -59,9 +59,6 @@ class dota:
             else:
                 # is player html
                 players.append(parse_player(country, cells))
-
-        for p in players:
-            print(p)
         return players
 
     def get_player_info(self, playerName, results=False):
